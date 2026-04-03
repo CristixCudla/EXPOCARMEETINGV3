@@ -5,7 +5,15 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Car, Trophy, Users, Ticket, LogIn, UserPlus, LogOut, LayoutDashboard, Calendar, Clock, MapPin } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Car, Trophy, Users, Ticket, LogIn, UserPlus, LogOut, LayoutDashboard, Calendar, Clock, MapPin, User, Menu, Settings } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
 
@@ -164,37 +172,83 @@ export default function HomePage() {
                 <span className="text-[#06b6d4]">MEETING</span>
               </span>
             </Link>
+            
             <div className="flex items-center gap-3">
               {user ? (
-                <>
-                  {(userProfile?.role === 'admin' || userProfile?.role === 'organizer') && (
-                    <Link href="/dashboard">
-                      <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />Dashboard
-                      </Button>
-                    </Link>
-                  )}
-                  {userProfile?.role === 'user' && (
-                    <Link href="/register-car">
-                      <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500">
-                        <Car className="w-4 h-4 mr-2" />Mașină
-                      </Button>
-                    </Link>
-                  )}
-                  <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-pink-500 flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="hidden md:inline">{userProfile?.full_name || 'Cont'}</span>
+                      <Menu className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-black/95 border-white/20 text-white">
+                    <DropdownMenuLabel className="text-cyan-400">
+                      {userProfile?.email || 'Contul Meu'}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-white/10" />
+                    
+                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10">
+                      <Link href="/register-car" className="flex items-center gap-2">
+                        <Car className="w-4 h-4 text-pink-400" />
+                        <span>Înregistrează Mașina</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10">
+                      <Link href="/#best-cars" className="flex items-center gap-2">
+                        <Trophy className="w-4 h-4 text-yellow-400" />
+                        <span>Vezi Mașinile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10">
+                      <Link href="/tickets" className="flex items-center gap-2">
+                        <Ticket className="w-4 h-4 text-cyan-400" />
+                        <span>Support Tickets</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    
+                    {(userProfile?.role === 'admin' || userProfile?.role === 'organizer') && (
+                      <>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10">
+                          <Link href="/dashboard" className="flex items-center gap-2">
+                            <LayoutDashboard className="w-4 h-4 text-purple-400" />
+                            <span className="font-semibold">
+                              {userProfile?.role === 'admin' ? 'Admin Panel' : 'Organizator Panel'}
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
+                    <DropdownMenuSeparator className="bg-white/10" />
+                    
+                    <DropdownMenuItem 
+                      onClick={handleSignOut}
+                      className="cursor-pointer hover:bg-red-500/10 text-red-400"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      <span>Deconectare</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <>
                   <Link href="/auth/login">
-                    <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400">
-                      <LogIn className="w-4 h-4 mr-2" />Login
+                    <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
+                      <LogIn className="w-4 h-4 mr-2" />
+                      <span className="hidden md:inline">Login</span>
                     </Button>
                   </Link>
                   <Link href="/auth/register">
-                    <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500">
-                      <UserPlus className="w-4 h-4 mr-2" />Register
+                    <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      <span className="hidden md:inline">Register</span>
                     </Button>
                   </Link>
                 </>
@@ -223,7 +277,7 @@ export default function HomePage() {
       </section>
 
       {bestCars.length > 0 && (
-        <section className="relative z-10 py-16 px-5">
+        <section id="best-cars" className="relative z-10 py-16 px-5">
           <div className="max-w-5xl mx-auto">
             <p className="section-label text-center mb-8">BEST CAR OF THE SHOW</p>
             <h2 className="text-4xl font-black text-center mb-12 uppercase">
