@@ -72,19 +72,17 @@ export default function Navbar() {
       <div className="px-4 md:px-5 lg:px-10 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative">
-              <Image 
-                src="/logo-expo-final.png" 
-                alt="EXPO CAR MEETING" 
-                width={280} 
-                height={60}
-                className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain"
-                priority
-                style={{ 
-                  filter: 'brightness(1.5) contrast(1.4) saturate(1.15) drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 15px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 10px rgba(236, 72, 153, 0.3))'
-                }}
-              />
-            </div>
+            <span className="font-logo-cyberpunk text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wider">
+              <span className="text-[#ec4899]" style={{
+                textShadow: '0 0 15px rgba(236, 72, 153, 0.8), 0 0 30px rgba(236, 72, 153, 0.5)'
+              }}>EXPO</span>
+              <span className="text-white" style={{
+                textShadow: '0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.4)'
+              }}> CAR </span>
+              <span className="text-[#06b6d4]" style={{
+                textShadow: '0 0 15px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.5)'
+              }}>MEETING</span>
+            </span>
           </Link>
           
           <div className="flex items-center gap-2 md:gap-3">
