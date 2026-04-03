@@ -1,18 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { Ticket, Plus, MessageSquare, Clock, CheckCircle, XCircle, ArrowLeft, Send } from 'lucide-react'
+import { Ticket, Plus, MessageSquare, Clock, ArrowLeft, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -84,7 +83,6 @@ export default function TicketsPage() {
     e.preventDefault()
     
     try {
-      // Create ticket
       const { data: ticketData, error: ticketError } = await supabase
         .from('tickets')
         .insert({
@@ -97,7 +95,6 @@ export default function TicketsPage() {
       
       if (ticketError) throw ticketError
 
-      // Add first message
       const { error: messageError } = await supabase
         .from('ticket_messages')
         .insert({
@@ -138,7 +135,6 @@ export default function TicketsPage() {
       setReplyMessage('')
       loadMessages(selectedTicket.id)
       
-      // Update ticket status
       await supabase
         .from('tickets')
         .update({ status: 'in_progress' })
@@ -166,217 +162,200 @@ export default function TicketsPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white">Se încarcă...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] relative overflow-hidden py-12 px-4">
-      {/* Background particles */}
-      <div className="particle-bg">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-black text-white py-12 px-4">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <Link href="/">
-            <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
+            <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Înapoi la Home
             </Button>
           </Link>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl mb-6">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="glow-box rounded-full p-3 bg-gradient-to-br from-cyan-500 to-blue-500">
-                    <Ticket className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl font-bold gradient-text">Support Tickets</CardTitle>
-                    <CardDescription className="text-gray-400">Gestionează cererile tale de suport</CardDescription>
-                  </div>
+        <Card className="neon-card bg-black/40 backdrop-blur-xl border-white/20 mb-6">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20">
+                  <Ticket className="w-6 h-6 text-cyan-400" />
                 </div>
-                <Dialog open={newTicketOpen} onOpenChange={setNewTicketOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Ticket Nou
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-white/20 text-white">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl gradient-text">Crează Ticket Nou</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleCreateTicket} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label>Subiect</Label>
-                        <Input
-                          placeholder="Descrie problema pe scurt..."
-                          value={newTicket.subject}
-                          onChange={(e) => setNewTicket({ ...newTicket, subject: e.target.value })}
-                          required
-                          className="bg-white/5 border-white/20 text-white"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Mesaj</Label>
-                        <Textarea
-                          placeholder="Descrie problema în detaliu..."
-                          value={newTicket.message}
-                          onChange={(e) => setNewTicket({ ...newTicket, message: e.target.value })}
-                          required
-                          rows={6}
-                          className="bg-white/5 border-white/20 text-white"
-                        />
-                      </div>
-                      <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500">
-                        Creează Ticket
-                      </Button>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+                <div>
+                  <CardTitle className="text-2xl font-black uppercase tracking-tight">
+                    <span className="text-cyan-400">SUPPORT TICKETS</span>
+                  </CardTitle>
+                  <p className="text-white/50 text-sm mt-1">Gestionează cererile tale de suport</p>
+                </div>
               </div>
-            </CardHeader>
-          </Card>
-
-          {loading ? (
-            <div className="text-center text-gray-400 py-12">Se încarcă...</div>
-          ) : tickets.length === 0 ? (
-            <Card className="bg-white/5 border-white/10">
-              <CardContent className="p-12 text-center">
-                <Ticket className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-400 mb-4">Nu ai niciun ticket încă</p>
-                <Button onClick={() => setNewTicketOpen(true)} variant="outline" className="border-cyan-400 text-cyan-400">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Crează primul ticket
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid md:grid-cols-3 gap-6">
-              {/* Tickets List */}
-              <div className="md:col-span-1 space-y-3">
-                {tickets.map((ticket) => (
-                  <motion.div
-                    key={ticket.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    whileHover={{ scale: 1.02 }}
-                    onClick={() => openTicket(ticket)}
-                    className="cursor-pointer"
-                  >
-                    <Card className={`bg-gradient-to-br from-white/5 to-white/0 border-white/10 hover:border-cyan-400/50 transition-all ${
-                      selectedTicket?.id === ticket.id ? 'border-cyan-400' : ''
-                    }`}>
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-white text-sm line-clamp-1">{ticket.subject}</h4>
-                          {getStatusBadge(ticket.status)}
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-gray-400">
-                          <Clock className="w-3 h-3" />
-                          {new Date(ticket.created_at).toLocaleDateString('ro-RO')}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Messages */}
-              <div className="md:col-span-2">
-                {selectedTicket ? (
-                  <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 h-[600px] flex flex-col">
-                    <CardHeader className="border-b border-white/10">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-xl text-white">{selectedTicket.subject}</CardTitle>
-                          <CardDescription className="text-gray-400 mt-1">
-                            Creat la {new Date(selectedTicket.created_at).toLocaleString('ro-RO')}
-                          </CardDescription>
-                        </div>
-                        {getStatusBadge(selectedTicket.status)}
-                      </div>
-                    </CardHeader>
-                    <ScrollArea className="flex-1 p-4">
-                      <div className="space-y-4">
-                        {messages.map((msg, index) => {
-                          const isOwn = msg.sender_id === user.id
-                          const isAdmin = msg.profiles?.role === 'admin' || msg.profiles?.role === 'organizer'
-                          
-                          return (
-                            <motion.div
-                              key={msg.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.05 }}
-                              className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
-                            >
-                              <div className={`max-w-[80%] ${
-                                isOwn 
-                                  ? 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-400/30' 
-                                  : isAdmin
-                                  ? 'bg-gradient-to-br from-pink-500/20 to-orange-500/20 border-pink-400/30'
-                                  : 'bg-white/5 border-white/10'
-                              } border rounded-lg p-3`}>
-                                <div className="flex items-center gap-2 mb-1">
-                                  <p className="text-xs font-semibold text-white">
-                                    {isOwn ? 'Tu' : msg.profiles?.full_name || 'Support'}
-                                  </p>
-                                  {isAdmin && !isOwn && (
-                                    <Badge variant="outline" className="text-[10px] px-1 py-0 border-pink-400 text-pink-400">
-                                      {msg.profiles?.role === 'admin' ? 'Admin' : 'Organizator'}
-                                    </Badge>
-                                  )}
-                                  <p className="text-[10px] text-gray-400">
-                                    {new Date(msg.created_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
-                                  </p>
-                                </div>
-                                <p className="text-sm text-gray-200 whitespace-pre-wrap">{msg.message}</p>
-                              </div>
-                            </motion.div>
-                          )
-                        })}
-                      </div>
-                    </ScrollArea>
-                    <Separator className="bg-white/10" />
-                    <form onSubmit={handleSendReply} className="p-4">
-                      <div className="flex gap-2">
-                        <Textarea
-                          placeholder="Scrie un răspuns..."
-                          value={replyMessage}
-                          onChange={(e) => setReplyMessage(e.target.value)}
-                          rows={2}
-                          className="bg-white/5 border-white/20 text-white flex-1"
-                        />
-                        <Button type="submit" size="icon" className="bg-gradient-to-r from-cyan-500 to-blue-500">
-                          <Send className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </form>
-                  </Card>
-                ) : (
-                  <Card className="bg-white/5 border-white/10 h-[600px] flex items-center justify-center">
-                    <div className="text-center">
-                      <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-400">Selectează un ticket pentru a vedea conversația</p>
+              <Dialog open={newTicketOpen} onOpenChange={setNewTicketOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Ticket Nou
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-black border-white/20 text-white">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-black uppercase text-cyan-400">Creează Ticket Nou</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleCreateTicket} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-white/70">Subiect</Label>
+                      <Input
+                        placeholder="Descrie problema pe scurt..."
+                        value={newTicket.subject}
+                        onChange={(e) => setNewTicket({ ...newTicket, subject: e.target.value })}
+                        required
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                      />
                     </div>
-                  </Card>
-                )}
-              </div>
+                    <div className="space-y-2">
+                      <Label className="text-white/70">Mesaj</Label>
+                      <Textarea
+                        placeholder="Descrie problema în detaliu..."
+                        value={newTicket.message}
+                        onChange={(e) => setNewTicket({ ...newTicket, message: e.target.value })}
+                        required
+                        rows={6}
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/30"
+                      />
+                    </div>
+                    <Button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-blue-500">
+                      Creează Ticket
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
-          )}
-        </motion.div>
+          </CardHeader>
+        </Card>
+
+        {loading ? (
+          <div className="text-center text-white/50 py-12">Se încarcă...</div>
+        ) : tickets.length === 0 ? (
+          <Card className="neon-card bg-black/40 backdrop-blur-xl border-white/20">
+            <CardContent className="p-12 text-center">
+              <Ticket className="w-16 h-16 text-white/30 mx-auto mb-4" />
+              <p className="text-white/50 mb-4">Nu ai niciun ticket încă</p>
+              <Button onClick={() => setNewTicketOpen(true)} variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
+                <Plus className="w-4 h-4 mr-2" />
+                Creează primul ticket
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Tickets List */}
+            <div className="md:col-span-1 space-y-3">
+              {tickets.map((ticket) => (
+                <Card
+                  key={ticket.id}
+                  onClick={() => openTicket(ticket)}
+                  className={`neon-card cursor-pointer transition-all hover:border-cyan-400/50 ${
+                    selectedTicket?.id === ticket.id ? 'border-cyan-400 bg-cyan-500/5' : 'bg-black/40'
+                  }`}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="font-semibold text-white text-sm line-clamp-1">{ticket.subject}</h4>
+                      {getStatusBadge(ticket.status)}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-white/50">
+                      <Clock className="w-3 h-3" />
+                      {new Date(ticket.created_at).toLocaleDateString('ro-RO')}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Messages */}
+            <div className="md:col-span-2">
+              {selectedTicket ? (
+                <Card className="neon-card bg-black/40 backdrop-blur-xl border-white/20 h-[600px] flex flex-col">
+                  <CardHeader className="border-b border-white/10">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-xl text-white">{selectedTicket.subject}</CardTitle>
+                        <p className="text-white/50 text-sm mt-1">
+                          Creat la {new Date(selectedTicket.created_at).toLocaleString('ro-RO')}
+                        </p>
+                      </div>
+                      {getStatusBadge(selectedTicket.status)}
+                    </div>
+                  </CardHeader>
+                  <ScrollArea className="flex-1 p-4">
+                    <div className="space-y-4">
+                      {messages.map((msg) => {
+                        const isOwn = msg.sender_id === user.id
+                        const isAdmin = msg.profiles?.role === 'admin' || msg.profiles?.role === 'organizer'
+                        
+                        return (
+                          <div
+                            key={msg.id}
+                            className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div className={`max-w-[80%] ${
+                              isOwn 
+                                ? 'bg-cyan-500/10 border-cyan-400/30' 
+                                : isAdmin
+                                ? 'bg-pink-500/10 border-pink-400/30'
+                                : 'bg-white/5 border-white/10'
+                            } border rounded-lg p-3`}>
+                              <div className="flex items-center gap-2 mb-1">
+                                <p className="text-xs font-semibold text-white">
+                                  {isOwn ? 'Tu' : msg.profiles?.full_name || 'Support'}
+                                </p>
+                                {isAdmin && !isOwn && (
+                                  <Badge variant="outline" className="text-[10px] px-1 py-0 border-pink-400 text-pink-400">
+                                    {msg.profiles?.role === 'admin' ? 'Admin' : 'Organizator'}
+                                  </Badge>
+                                )}
+                                <p className="text-[10px] text-white/40">
+                                  {new Date(msg.created_at).toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                                </p>
+                              </div>
+                              <p className="text-sm text-white/80 whitespace-pre-wrap">{msg.message}</p>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </ScrollArea>
+                  <Separator className="bg-white/10" />
+                  <form onSubmit={handleSendReply} className="p-4">
+                    <div className="flex gap-2">
+                      <Textarea
+                        placeholder="Scrie un răspuns..."
+                        value={replyMessage}
+                        onChange={(e) => setReplyMessage(e.target.value)}
+                        rows={2}
+                        className="bg-white/5 border-white/20 text-white flex-1 placeholder:text-white/30"
+                      />
+                      <Button type="submit" size="icon" className="bg-gradient-to-r from-cyan-500 to-blue-500">
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </form>
+                </Card>
+              ) : (
+                <Card className="neon-card bg-black/40 backdrop-blur-xl border-white/20 h-[600px] flex items-center justify-center">
+                  <div className="text-center">
+                    <MessageSquare className="w-16 h-16 text-white/30 mx-auto mb-4" />
+                    <p className="text-white/50">Selectează un ticket pentru a vedea conversația</p>
+                  </div>
+                </Card>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
