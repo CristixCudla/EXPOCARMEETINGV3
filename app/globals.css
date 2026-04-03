@@ -1,4 +1,6 @@
 /* EXPO CAR MEETING — NEON DESIGN SYSTEM */
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Audiowide&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,11 @@
    │  VARIABILE DE DESIGN (LIGHT MODE)                                      │
    ╰─────────────────────────────────────────────────────────────────────────╯ */
 :root {
+  /* Fonturi Cyberpunk/Agresive */
+  --font-logo: 'Audiowide', 'Orbitron', sans-serif;
+  --font-heading: 'Teko', 'Barlow Condensed', sans-serif;
+  --font-body: 'Rajdhani', 'Inter', sans-serif;
+
   /* Neon palette */
   --neon-pink: #ec4899;
   --neon-cyan: #06b6d4;
@@ -215,11 +222,18 @@ html {
    │  CLASE TIPOGRAFIE NEON                                                  │
    ╰─────────────────────────────────────────────────────────────────────────╯ */
 .font-display {
-  font-family: var(--font-display), 'Barlow Condensed', sans-serif !important;
+  font-family: var(--font-heading), 'Teko', 'Barlow Condensed', sans-serif !important;
+}
+
+.font-logo-cyberpunk {
+  font-family: var(--font-logo), 'Audiowide', 'Orbitron', sans-serif !important;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 .section-label {
-  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-family: var(--font-body), 'Rajdhani', sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -228,22 +242,19 @@ html {
 }
 
 .display-heading {
-  font-family: var(--font-display), 'Barlow Condensed', sans-serif !important;
-  font-weight: 900;
-  font-stretch: 50%;
+  font-family: var(--font-heading), 'Teko', sans-serif !important;
+  font-weight: 700;
   font-size: clamp(2.5rem, 7vw, 8rem);
-  line-height: 0.85;
+  line-height: 0.9;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: -0.025em;
-  word-spacing: -0.05em;
+  letter-spacing: 0.02em;
 }
 
 .italic-subtitle {
-  font-family: var(--font-display), 'Barlow Condensed', sans-serif !important;
-  font-weight: 700;
-  font-style: italic;
-  font-stretch: 75%;
+  font-family: var(--font-heading), 'Teko', sans-serif !important;
+  font-weight: 600;
+  font-style: normal;
   background: linear-gradient(90deg, #ec4899, #a855f7, #06b6d4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

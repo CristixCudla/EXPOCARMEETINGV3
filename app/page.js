@@ -155,19 +155,20 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Hero Section cu fundal */}
+      {/* Hero Section cu video background */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image Overlay */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.4
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black"></div>
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-full object-cover opacity-50"
+          >
+            <source src="https://customer-assets.emergentagent.com/job_modernized-webapp/artifacts/7icrftaf_73629-YLUmeRy3zbBqbwnXsGogQbuspj05oZ.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black"></div>
         </div>
 
         {/* Hero Content */}
@@ -175,17 +176,17 @@ export default function HomePage() {
           <p className="section-label mb-6 text-cyan-400">
             <MapPin className="inline w-3 h-3 mr-2" />FĂLTICENI • NADA FLORILOR — 2026
           </p>
-          <h1 className="display-heading mb-8 text-5xl md:text-7xl lg:text-8xl font-black leading-tight">
+          <h1 className="display-heading mb-8 text-5xl md:text-7xl lg:text-8xl leading-tight">
             UNDE <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">PASIUNEA</span><br />
             & PERFORMANȚA<br />
             <span className="text-5xl md:text-6xl lg:text-7xl">SE ÎNTÂLNESC</span>
           </h1>
           <div className="flex flex-wrap gap-4 justify-center mt-8">
             <Link href={user ? "/register-car" : "/auth/register"}>
-              <Button size="lg" className="btn-neon px-8 py-6 text-lg">ÎNSCRIERE ACUM</Button>
+              <Button size="lg" className="btn-neon px-8 py-6 text-lg font-bold">ÎNSCRIERE ACUM</Button>
             </Link>
             <Link href="#best-cars">
-              <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-8 py-6 text-lg">
+              <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-8 py-6 text-lg font-bold">
                 VEZI MAȘINILE <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
@@ -422,14 +423,22 @@ export default function HomePage() {
               <div className="flex items-center gap-3 mb-4">
                 <Clock className="w-8 h-8 text-cyan-400" />
                 <div>
-                  <p className="text-sm text-gray-400 uppercase tracking-wide">Ore</p>
-                  <p className="text-2xl font-bold text-white">În Curând</p>
+                  <p className="text-sm text-gray-400 uppercase tracking-wide">Program</p>
+                  {eventSchedule.length > 0 ? (
+                    <Link href="/program">
+                      <Button variant="link" className="text-2xl font-bold text-white hover:text-cyan-400 p-0 h-auto">
+                        Vezi Program <ArrowRight className="inline ml-2 w-6 h-6" />
+                      </Button>
+                    </Link>
+                  ) : (
+                    <p className="text-2xl font-bold text-white">În Curând</p>
+                  )}
                 </div>
               </div>
             </Card>
           </div>
 
-          {eventSchedule.length > 0 && (
+          {eventSchedule.length > 0 && eventSchedule.length <= 3 && (
             <div className="mt-12 space-y-4 max-w-4xl mx-auto">
               {eventSchedule.map((item) => (
                 <Card key={item.id} className="bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 backdrop-blur-xl p-6 hover:border-cyan-400/50 transition-colors">
@@ -452,6 +461,14 @@ export default function HomePage() {
                   </div>
                 </Card>
               ))}
+              
+              <div className="text-center mt-8">
+                <Link href="/program">
+                  <Button variant="outline" size="lg" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 font-bold">
+                    VEZI PROGRAMUL COMPLET <ArrowRight className="ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           )}
         </div>
