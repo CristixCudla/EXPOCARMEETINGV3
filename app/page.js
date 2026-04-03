@@ -1,27 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Calendar, 
-  Clock, 
-  Car, 
-  Trophy, 
-  Users, 
-  Ticket,
-  LogIn,
-  UserPlus,
-  LogOut,
-  LayoutDashboard,
-  Mail,
-  ExternalLink,
-  Sparkles,
-  MapPin
-} from 'lucide-react'
+import { Car, Trophy, Users, Ticket, LogIn, UserPlus, LogOut, LayoutDashboard, Calendar, Clock, MapPin } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
 
@@ -35,7 +19,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check initial auth state
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -44,7 +27,6 @@ export default function HomePage() {
       }
     })
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -93,7 +75,6 @@ export default function HomePage() {
 
   async function loadPublicData() {
     try {
-      // Load event schedule
       const { data: scheduleData, error: scheduleError } = await supabase
         .from('event_schedule')
         .select('*')
@@ -102,7 +83,6 @@ export default function HomePage() {
       if (scheduleError) throw scheduleError
       setEventSchedule(scheduleData || [])
 
-      // Load best car nominees
       const { data: carsData, error: carsError } = await supabase
         .from('cars')
         .select('*')
@@ -112,7 +92,6 @@ export default function HomePage() {
       
       if (carsError) throw carsError
       
-      // Get vote counts for each car
       if (carsData) {
         const carsWithVotes = await Promise.all(
           carsData.map(async (car) => {
@@ -126,7 +105,6 @@ export default function HomePage() {
         setBestCars(carsWithVotes)
       }
 
-      // Load sponsors
       const { data: sponsorsData, error: sponsorsError } = await supabase
         .from('sponsors')
         .select('*')
@@ -138,7 +116,6 @@ export default function HomePage() {
       setLoading(false)
     } catch (error) {
       console.error('Error loading public data:', error)
-      toast.error('Eroare la încărcarea datelor')
       setLoading(false)
     }
   }
@@ -163,7 +140,7 @@ export default function HomePage() {
       
       toast.success('Votul tău a fost înregistrat! 🎉')
       setUserVote({ car_id: carId })
-      loadPublicData() // Reload to update vote counts
+      loadPublicData()
     } catch (error) {
       console.error('Error voting:', error)
       toast.error('Eroare la înregistrarea votului')
@@ -176,87 +153,61 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] relative overflow-hidden">
-      {/* Animated background particles */}
-      <div className="particle-bg">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-      </div>
+    <div className=\"min-h-screen bg-black text-white\">
+      {/* NAVIGATION */}
+      <nav className=\"fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-b border-white/10\">
+        <div className=\"px-5 md:px-10 py-4\">
+          <div className=\"flex items-center justify-between\">
+            <Link href=\"/\" className=\"flex items-center gap-2\">
+              <span style={{ fontFamily: 'var(--font-orbitron)' }} className=\"text-xl md:text-2xl font-black tracking-wider whitespace-nowrap\">
+                <span className=\"text-[#ec4899] drop-shadow-[0_0_12px_rgba(236,72,153,0.9)] animate-pulse\">EXPO</span>
+                <span className=\"text-white\"> CAR </span>
+                <span className=\"text-[#06b6d4] drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]\">MEETING</span>
+              </span>
+            </Link>
 
-      {/* Navigation */}
-      <nav className="relative z-10 border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-3"
-            >
-              <div className="relative">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                  className="glow-box rounded-full p-2 bg-gradient-to-br from-cyan-500 to-pink-500"
-                >
-                  <Car className="w-6 h-6 text-white" />
-                </motion.div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold gradient-text glow">
-                  EXPO CAR MEETING
-                </h1>
-                <p className="text-xs text-cyan-400">Fălticeni • 2026</p>
-              </div>
-            </motion.div>
-
-            <div className="flex items-center gap-3">
+            <div className=\"flex items-center gap-3\">
               {user ? (
                 <>
                   {userProfile && (
-                    <Badge variant="outline" className="text-cyan-400 border-cyan-400">
-                      <Users className="w-3 h-3 mr-1" />
+                    <Badge variant=\"outline\" className=\"text-cyan-400 border-cyan-400 hidden md:flex\">
+                      <Users className=\"w-3 h-3 mr-1\" />
                       {userProfile.role === 'admin' ? 'Admin' : userProfile.role === 'organizer' ? 'Organizator' : 'User'}
                     </Badge>
                   )}
                   {(userProfile?.role === 'admin' || userProfile?.role === 'organizer') && (
-                    <Link href="/dashboard">
-                      <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                    <Link href=\"/dashboard\">
+                      <Button variant=\"outline\" size=\"sm\" className=\"border-cyan-400 text-cyan-400 hover:bg-cyan-400/10\">
+                        <LayoutDashboard className=\"w-4 h-4 mr-2\" />
                         Dashboard
                       </Button>
                     </Link>
                   )}
                   {userProfile?.role === 'user' && (
-                    <Link href="/register-car">
-                      <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
-                        <Car className="w-4 h-4 mr-2" />
-                        Înregistrează Mașina
+                    <Link href=\"/register-car\">
+                      <Button size=\"sm\" className=\"bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600\">
+                        <Car className=\"w-4 h-4 mr-2\" />
+                        <span className=\"hidden md:inline\">Înregistrează Mașina</span>
+                        <span className=\"md:hidden\">Mașină</span>
                       </Button>
                     </Link>
                   )}
-                  <Button variant="outline" size="sm" onClick={handleSignOut}>
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Ieșire
+                  <Button variant=\"ghost\" size=\"sm\" onClick={handleSignOut} className=\"text-white/70 hover:text-white\">
+                    <LogOut className=\"w-4 h-4\" />
                   </Button>
                 </>
               ) : (
                 <>
-                  <Link href="/auth/login">
-                    <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
-                      <LogIn className="w-4 h-4 mr-2" />
-                      Conectare
+                  <Link href=\"/auth/login\">
+                    <Button variant=\"outline\" size=\"sm\" className=\"border-cyan-400 text-cyan-400 hover:bg-cyan-400/10\">
+                      <LogIn className=\"w-4 h-4 mr-2\" />
+                      <span className=\"hidden md:inline\">Conectare</span>
                     </Button>
                   </Link>
-                  <Link href="/auth/register">
-                    <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Înregistrare
+                  <Link href=\"/auth/register\">
+                    <Button size=\"sm\" className=\"bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600\">
+                      <UserPlus className=\"w-4 h-4 mr-2\" />
+                      <span className=\"hidden md:inline\">Înregistrare</span>
                     </Button>
                   </Link>
                 </>
@@ -266,416 +217,303 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative z-10 py-20 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <motion.div
-              animate={{
-                scale: [1, 1.02, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <h2 className="text-sm md:text-base text-cyan-400 font-semibold mb-4 tracking-widest uppercase">
-                FĂLTICENI • NADA FLORILOR — 2026
-              </h2>
-            </motion.div>
+      {/* HERO SECTION */}
+      <section className=\"relative h-screen flex items-center justify-center overflow-hidden\">
+        <div className=\"absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/85 z-10\"></div>
+        
+        <div className=\"relative z-20 text-center px-5 md:px-10 max-w-5xl mx-auto\">
+          <p className=\"section-label mb-6 tracking-widest\">
+            <MapPin className=\"inline w-3 h-3 mr-2\" />
+            FĂLTICENI • NADA FLORILOR — 2026
+          </p>
+
+          <h1 className=\"display-heading mb-6\">
+            UNDE <span className=\"italic-subtitle\">PASIUNEA</span>
+            <br />
+            &amp; PERFORMANȚA
+            <br />
+            SE ÎNTÂLNESC
+          </h1>
+
+          <p className=\"text-lg md:text-xl text-white/60 mb-10 max-w-2xl mx-auto font-light\">
+            Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o 
+            frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
+          </p>
+
+          <div className=\"flex flex-wrap gap-4 justify-center\">
+            <Link href={user ? \"/register-car\" : \"/auth/register\"}>
+              <Button size=\"lg\" className=\"btn-neon px-8 py-6 text-base\">
+                ÎNSCRIERE ACUM
+              </Button>
+            </Link>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="text-white">UNDE </span>
-              <span className="gradient-text glow">PASIUNEA</span>
-              <br />
-              <span className="text-pink-400">&amp; PERFORMANȚA</span>
-              <br />
-              <span className="text-white">SE ÎNTÂLNESC</span>
-            </h1>
-
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o 
-              frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center mb-12">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href={user ? "/register-car" : "/auth/register"}>
-                  <Button size="lg" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold px-8 py-6 text-lg">
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    ÎNSCRIERE ACUM
-                  </Button>
-                </Link>
-              </motion.div>
-              
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 font-bold px-8 py-6 text-lg">
-                  <Car className="w-5 h-5 mr-2" />
-                  VEZI MAȘINILE →
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
-              {[
-                { label: 'MAȘINI ÎNSCRISE', value: '0+', sublabel: 'Build-uri confirmate' },
-                { label: 'MAȘINI ACCEPTATE', value: '∞', sublabel: '' },
-                { label: 'PASIONAȚI', value: '∞', sublabel: '' },
-                { label: 'ZILE PLINE', value: '2', sublabel: '' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-cyan-400/50 transition-all"
-                >
-                  <div className="text-3xl font-bold gradient-text">{stat.value}</div>
-                  <div className="text-xs text-gray-400 mt-1">{stat.label}</div>
-                  {stat.sublabel && (
-                    <div className="text-[10px] text-pink-400 mt-1">{stat.sublabel}</div>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+            <Link href=\"/cars\">
+              <Button size=\"lg\" variant=\"outline\" className=\"border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-8 py-6 text-base\">
+                <Car className=\"w-5 h-5 mr-2\" />
+                VEZI MAȘINILE →
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Event Schedule */}
-      <section className="relative z-10 py-16 bg-black/20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-sm text-cyan-400 font-semibold mb-3 tracking-widest uppercase">
-              EVENIMENT
+      {/* STATS SECTION */}
+      <section className=\"relative z-10 py-16 md:py-24 px-5 md:px-10\">
+        <div className=\"max-w-5xl mx-auto\">
+          <div className=\"text-center mb-8\">
+            <div className=\"deco-symbol mb-4\">✦ ✦ ✦</div>
+          </div>
+
+          <div className=\"grid md:grid-cols-3 gap-8 md:gap-12\">
+            <div className=\"text-center border-accent-left\">
+              <div className=\"stat-number text-5xl md:text-6xl mb-2\">0+</div>
+              <div className=\"text-white/50 text-sm tracking-wider uppercase\">Mașini Înscrise</div>
+              <div className=\"text-[#ec4899] text-xs mt-1\">Build-uri confirmate</div>
+            </div>
+
+            <div className=\"text-center\">
+              <div className=\"stat-number text-5xl md:text-6xl mb-2\">∞</div>
+              <div className=\"text-white/50 text-sm tracking-wider uppercase\">Mașini Acceptate</div>
+            </div>
+
+            <div className=\"text-center border-accent-right\">
+              <div className=\"stat-number text-5xl md:text-6xl mb-2\">2</div>
+              <div className=\"text-white/50 text-sm tracking-wider uppercase\">Zile Pline</div>
+            </div>
+          </div>
+
+          <div className=\"divider-curve mt-12\"></div>
+        </div>
+      </section>
+
+      {/* DESPRE EVENIMENT */}
+      <section className=\"relative z-10 py-16 md:py-24 px-5 md:px-10\">
+        <div className=\"max-w-5xl mx-auto\">
+          <p className=\"section-label text-center mb-8\">DESPRE EVENIMENT</p>
+          
+          <div className=\"deco-symbol text-center mb-12\">✦ ✦ ✦</div>
+
+          <div className=\"grid md:grid-cols-2 gap-8 md:gap-12\">
+            <div className=\"border-accent-left\">
+              <h3 className=\"text-3xl font-black mb-4 uppercase tracking-tight\">SHOW AUTO</h3>
+              <p className=\"italic-subtitle text-2xl mb-4\">&amp; Concursuri</p>
+              <p className=\"text-white/60 leading-relaxed\">
+                Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o 
+                frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
+              </p>
+            </div>
+
+            <div className=\"border-accent-right\">
+              <h3 className=\"text-3xl font-black mb-4 uppercase tracking-tight\">COMUNITATE</h3>
+              <p className=\"italic-subtitle text-2xl mb-4\">&amp; Pasiune</p>
+              <p className=\"text-white/60 leading-relaxed mb-4\">
+                Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și 
+                înscrie-ți mașina.
+              </p>
+              <a 
+                href=\"https://chat.whatsapp.com/your-group-link\" 
+                target=\"_blank\" 
+                rel=\"noopener noreferrer\"
+                className=\"inline-flex items-center gap-2 text-[#25d366] hover:text-[#20ba5a] transition-colors\"
+              >
+                <svg className=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\">
+                  <path d=\"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z\"/>
+                </svg>
+                <span className=\"font-bold tracking-wide\">GRUP WHATSAPP</span>
+              </a>
+            </div>
+          </div>
+
+          <div className=\"divider-curve mt-12\"></div>
+        </div>
+      </section>
+
+      {/* BEST CAR VOTING */}
+      {bestCars.length > 0 && (
+        <section className=\"relative z-10 py-16 md:py-24 px-5 md:px-10\">
+          <div className=\"border-t neon-separator mb-12\"></div>
+          
+          <div className=\"max-w-5xl mx-auto\">
+            <p className=\"section-label text-center mb-8\">BEST CAR OF THE SHOW</p>
+            
+            <h2 className=\"text-4xl md:text-6xl font-black text-center mb-4 uppercase tracking-tight\">
+              VOTEAZĂ MAȘINA
+              <br />
+              <span className=\"italic-subtitle\">PREFERATĂ</span>
             </h2>
-            <h3 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-              PROGRAM COMPLET
-            </h3>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Vezi toate activitățile planificate pentru cele 2 zile de eveniment — orele exacte, detalii și tot ce trebuie să știi.
-            </p>
-          </motion.div>
 
-          {loading ? (
-            <div className="text-center text-gray-400">Se încarcă...</div>
-          ) : eventSchedule.length === 0 ? (
-            <div className="text-center">
-              <Card className="bg-white/5 border-white/10 max-w-md mx-auto">
-                <CardContent className="p-8">
-                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400">Programul va fi disponibil în curând</p>
-                </CardContent>
-              </Card>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {eventSchedule.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="bg-gradient-to-br from-white/5 to-white/0 border-white/10 hover:border-cyan-400/50 transition-all group">
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-gradient-to-br from-cyan-500/20 to-pink-500/20 rounded-xl p-3 group-hover:scale-110 transition-transform">
-                          <Calendar className="w-6 h-6 text-cyan-400" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <Badge variant="outline" className="text-cyan-400 border-cyan-400">
-                              {new Date(item.date).toLocaleDateString('ro-RO', { day: 'numeric', month: 'long' })}
-                            </Badge>
-                            <div className="flex items-center text-sm text-gray-400">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {item.time}
-                            </div>
-                          </div>
-                          <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                          {item.description && (
-                            <p className="text-sm text-gray-400">{item.description}</p>
-                          )}
-                        </div>
+            <div className=\"grid md:grid-cols-3 gap-8 mt-12\">
+              {bestCars.map((car, index) => (
+                <Card key={car.id} className=\"neon-card overflow-hidden group hover:border-[#a855f7]/50 transition-all\">
+                  <div className=\"relative h-48 overflow-hidden\">
+                    {car.images && car.images.length > 0 ? (
+                      <img 
+                        src={car.images[0]} 
+                        alt={`${car.make} ${car.model}`}
+                        className=\"w-full h-full object-cover group-hover:scale-110 transition-transform duration-500\"
+                      />
+                    ) : (
+                      <div className=\"w-full h-full bg-gradient-to-br from-pink-500/20 to-cyan-500/20 flex items-center justify-center\">
+                        <Car className=\"w-16 h-16 text-gray-400\" />
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Best Car of the Show */}
-      <section className="relative z-10 py-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Trophy className="w-6 h-6 text-yellow-400" />
-              <h2 className="text-sm text-yellow-400 font-semibold tracking-widest uppercase">
-                COMUNITATE &amp; PASIUNE
-              </h2>
-            </div>
-            <h3 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-              SHOW AUTO
-            </h3>
-            <p className="text-gray-400 max-w-2xl mx-auto mb-6">
-              Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și înscrie-ți mașina.
-            </p>
-            
-            {user && userProfile?.role === 'user' && (
-              <div className="flex justify-center gap-4">
-                <Link href="/register-car">
-                  <Button className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
-                    <Car className="w-4 h-4 mr-2" />
-                    Înregistrează-ți Mașina
-                  </Button>
-                </Link>
-                <Link href="/tickets">
-                  <Button variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
-                    <Ticket className="w-4 h-4 mr-2" />
-                    Support Tickets
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </motion.div>
-
-          {loading ? (
-            <div className="text-center text-gray-400">Se încarcă...</div>
-          ) : bestCars.length === 0 ? (
-            <div className="text-center">
-              <Card className="bg-white/5 border-white/10 max-w-md mx-auto">
-                <CardContent className="p-8">
-                  <Trophy className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-400">Mașinile pentru votare vor fi anunțate în curând</p>
-                </CardContent>
-              </Card>
-            </div>
-          ) : (
-            <>
-              <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-8">
-                {bestCars.map((car, index) => (
-                  <motion.div
-                    key={car.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.2 }}
-                    whileHover={{ y: -10 }}
-                  >
-                    <Card className="bg-gradient-to-br from-white/5 to-white/0 border-white/10 hover:border-pink-400/50 transition-all overflow-hidden group">
-                      <div className="relative h-48 overflow-hidden">
-                        {car.images && car.images.length > 0 ? (
-                          <img 
-                            src={car.images[0]} 
-                            alt={`${car.make} ${car.model}`}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-pink-500/20 to-cyan-500/20 flex items-center justify-center">
-                            <Car className="w-16 h-16 text-gray-400" />
-                          </div>
-                        )}
-                        <div className="absolute top-3 right-3">
-                          <Badge className="bg-gradient-to-r from-pink-500 to-orange-500 text-white border-0">
-                            <Trophy className="w-3 h-3 mr-1" />
-                            Nominalizat
-                          </Badge>
-                        </div>
+                    )}
+                  </div>
+                  <CardContent className=\"p-6\">
+                    <h4 className=\"text-2xl font-bold text-white mb-2\">
+                      {car.make} {car.model}
+                    </h4>
+                    {car.year && (
+                      <p className=\"text-sm text-white/50 mb-2\">An: {car.year}</p>
+                    )}
+                    {car.description && (
+                      <p className=\"text-sm text-white/60 mb-4 line-clamp-2\">{car.description}</p>
+                    )}
+                    
+                    <div className=\"flex items-center justify-between mb-4\">
+                      <div className=\"text-sm text-white/50\">
+                        <Trophy className=\"w-4 h-4 inline mr-1\" />
+                        {car.voteCount} {car.voteCount === 1 ? 'vot' : 'voturi'}
                       </div>
-                      <CardContent className="p-6">
-                        <h4 className="text-2xl font-bold text-white mb-2">
-                          {car.make} {car.model}
-                        </h4>
-                        {car.year && (
-                          <p className="text-sm text-gray-400 mb-2">An: {car.year}</p>
-                        )}
-                        {car.description && (
-                          <p className="text-sm text-gray-300 mb-4 line-clamp-2">{car.description}</p>
-                        )}
-                        
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="text-sm text-gray-400">
-                            {car.voteCount} {car.voteCount === 1 ? 'vot' : 'voturi'}
-                          </div>
-                          {userVote && userVote.car_id === car.id && (
-                            <Badge variant="outline" className="text-green-400 border-green-400">
-                              ✓ Ai votat
-                            </Badge>
-                          )}
-                        </div>
+                      {userVote && userVote.car_id === car.id && (
+                        <Badge variant=\"outline\" className=\"text-green-400 border-green-400 text-xs\">
+                          ✓ Ai votat
+                        </Badge>
+                      )}
+                    </div>
 
-                        <Button
-                          onClick={() => handleVote(car.id)}
-                          disabled={!user || userVote !== null}
-                          className={`w-full ${
-                            userVote && userVote.car_id === car.id
-                              ? 'bg-green-500 hover:bg-green-600'
-                              : 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600'
-                          }`}
-                        >
-                          {!user ? (
-                            <>
-                              <LogIn className="w-4 h-4 mr-2" />
-                              Autentifică-te pentru a vota
-                            </>
-                          ) : userVote && userVote.car_id === car.id ? (
-                            <>
-                              <Trophy className="w-4 h-4 mr-2" />
-                              Votul tău
-                            </>
-                          ) : userVote ? (
-                            'Ai votat deja'
-                          ) : (
-                            <>
-                              <Trophy className="w-4 h-4 mr-2" />
-                              Votează
-                            </>
-                          )}
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-
-              {!user && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="text-center"
-                >
-                  <Card className="bg-gradient-to-r from-cyan-500/10 to-pink-500/10 border-cyan-400/30 max-w-md mx-auto">
-                    <CardContent className="p-6">
-                      <p className="text-white mb-4">
-                        Autentifică-te pentru a vota pentru mașina ta preferată!
-                      </p>
-                      <Link href="/auth/login">
-                        <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                          <LogIn className="w-4 h-4 mr-2" />
-                          Conectare
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )}
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* Sponsors */}
-      {sponsors.length > 0 && (
-        <section className="relative z-10 py-16 bg-black/20">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-sm text-cyan-400 font-semibold mb-3 tracking-widest uppercase">
-                PARTENER OFICIAL
-              </h2>
-              <h3 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-                Sponsori
-              </h3>
-            </motion.div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-              {sponsors.map((sponsor, index) => (
-                <motion.a
-                  key={sponsor.id}
-                  href={sponsor.website_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="block"
-                >
-                  <Card className="bg-white/5 border-white/10 hover:border-cyan-400/50 transition-all overflow-hidden group">
-                    <CardContent className="p-6 flex flex-col items-center justify-center h-full min-h-[150px]">
-                      {sponsor.logo_url ? (
-                        <img 
-                          src={sponsor.logo_url} 
-                          alt={sponsor.name}
-                          className="max-w-full max-h-20 object-contain mb-3 group-hover:scale-110 transition-transform"
-                        />
+                    <Button
+                      onClick={() => handleVote(car.id)}
+                      disabled={!user || userVote !== null}
+                      className={`w-full ${ 
+                        userVote && userVote.car_id === car.id
+                          ? 'bg-green-500 hover:bg-green-600'
+                          : 'bg-gradient-to-r from-[#a855f7] to-[#ec4899] hover:from-[#a855f7]/90 hover:to-[#ec4899]/90'
+                      }`}
+                    >
+                      {!user ? (
+                        <>
+                          <LogIn className=\"w-4 h-4 mr-2\" />
+                          Autentifică-te
+                        </>
+                      ) : userVote && userVote.car_id === car.id ? (
+                        <>
+                          <Trophy className=\"w-4 h-4 mr-2\" />
+                          Votul tău
+                        </>
+                      ) : userVote ? (
+                        'Ai votat deja'
                       ) : (
-                        <div className="w-20 h-20 bg-gradient-to-br from-cyan-500/20 to-pink-500/20 rounded-full flex items-center justify-center mb-3">
-                          <ExternalLink className="w-8 h-8 text-gray-400" />
-                        </div>
+                        <>
+                          <Trophy className=\"w-4 h-4 mr-2\" />
+                          Votează
+                        </>
                       )}
-                      <p className="text-sm font-semibold text-white text-center">{sponsor.name}</p>
-                      {sponsor.website_url && (
-                        <p className="text-xs text-cyan-400 mt-1 flex items-center gap-1">
-                          <ExternalLink className="w-3 h-3" />
-                          Website
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.a>
+                    </Button>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 bg-black/40 backdrop-blur-xl py-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="glow-box rounded-full p-2 bg-gradient-to-br from-cyan-500 to-pink-500">
-                <Car className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="text-xl font-bold gradient-text">EXPO CAR MEETING</h3>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-400 mb-2">
-              <MapPin className="w-4 h-4 text-cyan-400" />
-              <span>Stadionul Nada Florilor, Fălticeni</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-400 mb-4">
-              <Calendar className="w-4 h-4 text-pink-400" />
-              <span>6-7 Iunie 2026</span>
-            </div>
-            <p className="text-sm text-gray-500">
-              © 2026 Expo Car Meeting. Toate drepturile rezervate.
+      {/* PROGRAM EVENIMENT */}
+      {eventSchedule.length > 0 && (
+        <section className=\"relative z-10 py-16 md:py-24 px-5 md:px-10\">
+          <div className=\"border-t neon-separator mb-12\"></div>
+          
+          <div className=\"max-w-5xl mx-auto\">
+            <p className=\"section-label text-center mb-8\">EVENIMENT</p>
+            
+            <h2 className=\"text-4xl md:text-6xl font-black text-center mb-4 uppercase tracking-tight animate-pulse\">
+              PROGRAM
+              <br />
+              <span className=\"italic-subtitle\">Complet</span>
+            </h2>
+
+            <p className=\"text-center text-white/60 mb-12 max-w-2xl mx-auto\">
+              Vezi toate activitățile planificate pentru cele 2 zile de eveniment — orele exacte, detalii și tot ce trebuie să știi.
             </p>
+
+            <div className=\"grid md:grid-cols-2 gap-6\">
+              {eventSchedule.map((item, index) => (
+                <Card key={item.id} className=\"neon-card p-6\">
+                  <div className=\"flex items-start gap-4\">
+                    <div className=\"bg-gradient-to-br from-cyan-500/20 to-pink-500/20 rounded-xl p-3\">
+                      <Calendar className=\"w-6 h-6 text-cyan-400\" />
+                    </div>
+                    <div className=\"flex-1\">
+                      <div className=\"flex flex-wrap items-center gap-3 mb-2\">
+                        <Badge variant=\"outline\" className=\"text-cyan-400 border-cyan-400 text-xs\">
+                          {new Date(item.date).toLocaleDateString('ro-RO', { day: 'numeric', month: 'long' })}
+                        </Badge>
+                        <div className=\"flex items-center text-sm text-white/50\">
+                          <Clock className=\"w-4 h-4 mr-1\" />
+                          {item.time}
+                        </div>
+                      </div>
+                      <h4 className=\"text-xl font-bold text-white mb-2\">{item.title}</h4>
+                      {item.description && (
+                        <p className=\"text-sm text-white/60\">{item.description}</p>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
+        </section>
+      )}
+
+      {/* SPONSORS */}
+      {sponsors.length > 0 && (
+        <section className=\"relative z-10 py-16 md:py-24 px-5 md:px-10\">
+          <div className=\"border-t neon-separator mb-12\"></div>
+          
+          <div className=\"max-w-5xl mx-auto\">
+            <p className=\"section-label text-center mb-8\">PARTENER OFICIAL</p>
+            
+            <div className=\"grid grid-cols-2 md:grid-cols-4 gap-8\">
+              {sponsors.map((sponsor) => (
+                <a
+                  key={sponsor.id}
+                  href={sponsor.website_url}
+                  target=\"_blank\"
+                  rel=\"noopener noreferrer\"
+                  className=\"block\"
+                >
+                  <Card className=\"neon-card p-6 hover:border-[#f97316]/50 transition-all group\">
+                    <div className=\"flex flex-col items-center justify-center h-full min-h-[120px]\">
+                      {sponsor.logo_url ? (
+                        <img 
+                          src={sponsor.logo_url} 
+                          alt={sponsor.name}
+                          className=\"max-w-full max-h-16 object-contain mb-3 group-hover:scale-110 transition-transform\"
+                        />
+                      ) : (
+                        <div className=\"w-16 h-16 bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-full flex items-center justify-center mb-3\">
+                          <span className=\"text-2xl\">{sponsor.name[0]}</span>
+                        </div>
+                      )}
+                      <p className=\"text-sm font-semibold text-white text-center\">{sponsor.name}</p>
+                    </div>
+                  </Card>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FOOTER */}
+      <footer className=\"relative z-10 border-t border-white/10 py-8 px-5 md:px-10 text-center\">
+        <div className=\"max-w-5xl mx-auto\">
+          <span style={{ fontFamily: 'var(--font-orbitron)' }} className=\"text-xl font-black tracking-wider mb-4 block\">
+            <span className=\"text-[#ec4899]\">EXPO</span>
+            <span className=\"text-white\"> CAR </span>
+            <span className=\"text-[#06b6d4]\">MEETING</span>
+          </span>
+          <p className=\"text-sm text-white/50\">© 2026 Expo Car Meeting. Toate drepturile rezervate.</p>
         </div>
       </footer>
     </div>
