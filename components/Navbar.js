@@ -73,7 +73,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="font-logo-cyberpunk text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wider">
-              <span className="text-[#ec4899]" style={{
+              <span className="text-[#ec4899] logo-pulsar-color" style={{
                 textShadow: '0 0 15px rgba(236, 72, 153, 0.8), 0 0 30px rgba(236, 72, 153, 0.5)'
               }}>EXPO</span>
               <span className="text-white" style={{
