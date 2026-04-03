@@ -85,19 +85,22 @@ export default function Navbar() {
             </span>
           </Link>
           
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 relative">
             {user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 gap-1 md:gap-2 px-2 md:px-3">
+                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 gap-1 md:gap-2 px-2 md:px-3 shrink-0">
                     <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-cyan-500 to-pink-500 flex items-center justify-center">
                       <User className="w-3 h-3 md:w-4 md:h-4 text-white" />
                     </div>
-                    <span className="hidden sm:inline text-xs md:text-sm">{userProfile?.full_name || 'Cont'}</span>
+                    <span className="hidden sm:inline text-xs md:text-sm whitespace-nowrap">{userProfile?.full_name || 'Cont'}</span>
                     <Menu className="w-3 h-3 md:w-4 md:h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-black/95 border-white/20 text-white">
+                <DropdownMenuContent align="end" className="w-56 bg-black/95 border-white/20 text-white fixed"
+                  sideOffset={5}
+                  style={{ position: 'fixed' }}
+                >
                   <DropdownMenuLabel className="text-cyan-400">
                     {userProfile?.email || 'Contul Meu'}
                   </DropdownMenuLabel>

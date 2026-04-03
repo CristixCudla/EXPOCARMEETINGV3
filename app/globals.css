@@ -135,6 +135,13 @@ body {
   font-size: 16px;
   position: relative;
   font-family: var(--font-body), 'Rajdhani', 'Orbitron', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Prevent layout shift when dropdown opens */
+[data-radix-popper-content-wrapper] {
+  position: fixed !important;
+  z-index: 9999 !important;
 }
 
 body::before {
