@@ -74,14 +74,14 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2">
             <div className="relative">
               <Image 
-                src="/logo-expo-transparent.png" 
+                src="/logo-expo-final.png" 
                 alt="EXPO CAR MEETING" 
                 width={280} 
                 height={60}
                 className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain"
                 priority
                 style={{ 
-                  filter: 'brightness(1.05) contrast(1.1) drop-shadow(0 0 12px rgba(6, 182, 212, 0.3))'
+                  filter: 'brightness(1.5) contrast(1.4) saturate(1.15) drop-shadow(0 0 20px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 15px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 10px rgba(236, 72, 153, 0.3))'
                 }}
               />
             </div>
