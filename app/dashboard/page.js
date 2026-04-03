@@ -13,6 +13,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { 
   LayoutDashboard, 
   Users, 
@@ -29,7 +35,8 @@ import {
   Send,
   MessageSquare,
   Edit,
-  Trash2
+  Trash2,
+  ChevronDown
 } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -109,6 +116,26 @@ export default function DashboardPage() {
       toast.error('Eroare la încărcarea datelor')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function updateUserRole(userId, newRole) {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role: newRole })
+        .eq('id', userId)
+
+      if (error) throw error
+
+      toast.success(`Rolul a fost actualizat la "${newRole}"!`)
+      
+      // Reload users
+      const { data: usersData } = await supabase.from('profiles').select('*')
+      setUsers(usersData || [])
+    } catch (error) {
+      console.error('Error updating role:', error)
+      toast.error('Eroare la actualizare rol')
     }
   }
 
@@ -396,13 +423,43 @@ export default function DashboardPage() {
                             <TableCell className="text-white">{user.full_name || 'N/A'}</TableCell>
                             <TableCell className="text-gray-400">{user.email}</TableCell>
                             <TableCell>
-                              <Badge variant="outline" className={
-                                user.role === 'admin' ? 'border-pink-400 text-pink-400' :
-                                user.role === 'organizer' ? 'border-yellow-400 text-yellow-400' :
-                                'border-cyan-400 text-cyan-400'
-                              }>
-                                {user.role}
-                              </Badge>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className={`
+                                      ${user.role === 'admin' ? 'border-pink-400 text-pink-400 hover:bg-pink-400/10' :
+                                        user.role === 'organizer' ? 'border-yellow-400 text-yellow-400 hover:bg-yellow-400/10' :
+                                        'border-cyan-400 text-cyan-400 hover:bg-cyan-400/10'}
+                                      font-semibold cursor-pointer
+                                    `}
+                                  >
+                                    {user.role}
+                                    <ChevronDown className="ml-2 w-3 h-3" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-black/95 border-white/20">
+                                  <DropdownMenuItem 
+                                    onClick={() => updateUserRole(user.id, 'user')}
+                                    className="text-cyan-400 hover:bg-cyan-400/10 cursor-pointer"
+                                  >
+                                    User
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => updateUserRole(user.id, 'organizer')}
+                                    className="text-yellow-400 hover:bg-yellow-400/10 cursor-pointer"
+                                  >
+                                    Organizer
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => updateUserRole(user.id, 'admin')}
+                                    className="text-pink-400 hover:bg-pink-400/10 cursor-pointer"
+                                  >
+                                    Admin
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
                             </TableCell>
                             <TableCell className="text-gray-400">
                               {new Date(user.created_at).toLocaleDateString('ro-RO')}
