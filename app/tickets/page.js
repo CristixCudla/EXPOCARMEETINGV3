@@ -31,6 +31,54 @@ export default function TicketsPage() {
     checkAuth()
   }, [])
 
+  // Setup Realtime subscription pentru tickets și messages
+  useEffect(() => {
+    if (!user) return
+
+    // Subscribe la tickets pentru actualizări live
+    const ticketsChannel = supabase
+      .channel('user-tickets-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Ticket change detected:', payload)
+          loadTickets(user.id)
+        }
+      )
+      .subscribe()
+
+    // Subscribe la ticket_messages pentru conversații live
+    const messagesChannel = supabase
+      .channel('user-messages-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'ticket_messages'
+        },
+        (payload) => {
+          console.log('New message detected:', payload)
+          // Check if message is for selected ticket
+          if (selectedTicket && payload.new.ticket_id === selectedTicket.id) {
+            loadMessages(selectedTicket.id)
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(ticketsChannel)
+      supabase.removeChannel(messagesChannel)
+    }
+  }, [user, selectedTicket])
+
   async function checkAuth() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {

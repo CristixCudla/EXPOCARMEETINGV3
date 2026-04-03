@@ -119,6 +119,75 @@ export default function DashboardPage() {
     }
   }
 
+  // Setup Realtime subscriptions pentru tickets
+  useEffect(() => {
+    if (!user || !userProfile) return
+
+    // Subscribe la tickets pentru actualizări live
+    const ticketsChannel = supabase
+      .channel('tickets-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tickets'
+        },
+        (payload) => {
+          console.log('Tickets change detected:', payload)
+          // Reload tickets when any change happens
+          loadTickets()
+        }
+      )
+      .subscribe()
+
+    // Subscribe la ticket_messages pentru conversații live
+    const messagesChannel = supabase
+      .channel('messages-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'ticket_messages'
+        },
+        (payload) => {
+          console.log('Message change detected:', payload)
+          // Reload tickets to update message counts
+          loadTickets()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(ticketsChannel)
+      supabase.removeChannel(messagesChannel)
+    }
+  }, [user, userProfile])
+
+  async function loadTickets() {
+    try {
+      const { data: ticketsData, error: ticketsError } = await supabase
+        .from('tickets')
+        .select(`
+          *,
+          profiles!tickets_user_id_fkey (
+            full_name,
+            email
+          ),
+          ticket_messages (
+            id
+          )
+        `)
+        .order('created_at', { ascending: false })
+
+      if (ticketsError) throw ticketsError
+      setTickets(ticketsData || [])
+    } catch (error) {
+      console.error('Error loading tickets:', error)
+    }
+  }
+
   async function updateUserRole(userId, newRole) {
     try {
       const { error } = await supabase
