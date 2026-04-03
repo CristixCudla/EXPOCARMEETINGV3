@@ -194,6 +194,138 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Secțiune BEST CAR OF THE SHOW - Afișată DOAR când există nominalizați */}
+      {bestCars.length > 0 && (
+        <section className="py-20 px-5 md:px-10 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <div className="inline-block mb-6">
+                <Badge className="bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-600 text-black border-0 px-6 py-3 text-lg font-black uppercase tracking-wider">
+                  <Trophy className="w-6 h-6 mr-2 inline" />
+                  Nominalizați
+                </Badge>
+              </div>
+              <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 mb-6">
+                BEST CAR
+              </h2>
+              <p className="text-4xl md:text-5xl font-black text-white mb-4">
+                OF THE SHOW
+              </p>
+              <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+                Mașinile nominalizate pentru premiul suprem! Votează-ți favorita pentru a câștiga "Best Car of the Show 2026"
+              </p>
+            </div>
+
+            {/* Grid Mașini Nominalizate */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {bestCars.map((car) => (
+                <Card 
+                  key={car.id} 
+                  className="relative overflow-hidden group cursor-pointer"
+                  onClick={() => {
+                    // Scroll to voting section or open modal
+                    const votingSection = document.getElementById('best-cars');
+                    if (votingSection) {
+                      votingSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  {/* Golden Glow Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/30 via-orange-500/30 to-yellow-600/30 backdrop-blur-sm"></div>
+                  
+                  {/* Golden Border Animation */}
+                  <div className="absolute inset-0 border-4 border-transparent bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute inset-[4px] bg-black"></div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    {/* Car Image */}
+                    {car.images && car.images[0] ? (
+                      <div className="aspect-video relative overflow-hidden">
+                        <img 
+                          src={car.images[0]} 
+                          alt={`${car.make} ${car.model}`}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        {/* Golden Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent"></div>
+                        
+                        {/* Trophy Badge */}
+                        <div className="absolute top-3 right-3">
+                          <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black border-0 font-black">
+                            <Trophy className="w-4 h-4 mr-1" />
+                            NOMINEE
+                          </Badge>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="aspect-video bg-gradient-to-br from-yellow-900/50 to-orange-900/50 flex items-center justify-center">
+                        <Trophy className="w-24 h-24 text-yellow-500/50" />
+                      </div>
+                    )}
+
+                    <CardContent className="p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10">
+                      <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
+                        {car.make} {car.model}
+                      </h3>
+                      {car.year && (
+                        <Badge variant="outline" className="border-yellow-500 text-yellow-500 mb-3">
+                          {car.year}
+                        </Badge>
+                      )}
+                      <p className="text-gray-300 text-sm line-clamp-2 mb-4">
+                        {car.description || 'Nominalizat pentru Best Car of the Show'}
+                      </p>
+                      
+                      {/* Voting Info */}
+                      <div className="flex items-center justify-between">
+                        {user && !userVote ? (
+                          <Button 
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleVote(car.id)
+                            }}
+                            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-black"
+                            size="sm"
+                          >
+                            <Trophy className="w-4 h-4 mr-2" />
+                            VOTEAZĂ
+                          </Button>
+                        ) : userVote?.car_id === car.id ? (
+                          <Badge className="w-full justify-center bg-green-500/20 text-green-400 border-green-400 font-bold">
+                            ✓ Votat
+                          </Badge>
+                        ) : !user ? (
+                          <Link href="/auth/login" className="w-full">
+                            <Button variant="outline" size="sm" className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10">
+                              Conectează-te pentru a vota
+                            </Button>
+                          </Link>
+                        ) : null}
+                      </div>
+                    </CardContent>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            {/* CTA Bottom */}
+            <div className="text-center mt-12">
+              <p className="text-gray-400 mb-4">
+                Ai și tu o mașină specială? Înscrie-te la eveniment!
+              </p>
+              <Link href={user ? "/register-car" : "/auth/register"}>
+                <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-black px-8 py-6">
+                  <Car className="w-5 h-5 mr-2" />
+                  ÎNSCRIE MAȘINA TA
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Secțiune Statistici */}
       <section className="py-20 px-5 md:px-10 relative z-10">
         <div className="max-w-7xl mx-auto">
@@ -313,81 +445,19 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <p className="section-label mb-4 text-cyan-400">Galerie & Mașini</p>
             <h2 className="text-5xl md:text-7xl font-black text-white mb-4">
-              MAȘINI
+              TOATE
             </h2>
             <p className="text-3xl md:text-4xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-6">
-              Acceptate
+              Mașinile
             </p>
             <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
-              Descoperă mașinile confirmate pentru eveniment. Galerie completă cu toate build-urile care vor fi prezente la Nada Florilor în 6–7 Iunie 2026.
+              Descoperă toate mașinile confirmate pentru eveniment. Vezi galeria completă cu build-urile care vor fi prezente la Nada Florilor în 6–7 Iunie 2026.
             </p>
             <Link href="/masini">
               <Button variant="outline" size="lg" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 font-bold">
                 VEZI TOATE MAȘINILE <ArrowRight className="ml-2" />
               </Button>
             </Link>
-          </div>
-
-          {/* Grid Mașini */}
-          {bestCars.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-              {bestCars.map((car) => (
-                <Card key={car.id} className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl overflow-hidden hover:scale-105 transition-transform duration-300">
-                  {car.images && car.images[0] && (
-                    <div className="aspect-video relative overflow-hidden">
-                      <img 
-                        src={car.images[0]} 
-                        alt={`${car.make} ${car.model}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {car.make} {car.model}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                      {car.description}
-                    </p>
-                    {user && !userVote && (
-                      <Button 
-                        onClick={() => handleVote(car.id)}
-                        size="sm"
-                        className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                      >
-                        <Trophy className="w-4 h-4 mr-2" />
-                        Votează
-                      </Button>
-                    )}
-                    {userVote?.car_id === car.id && (
-                      <Badge className="w-full justify-center bg-green-500/20 text-green-400 border-green-400">
-                        Votat ✓
-                      </Badge>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {/* Statistici Scurte */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-            <div className="text-center">
-              <div className="text-4xl font-black text-cyan-400 mb-2">{stats.acceptedCars}</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Build-uri confirmate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-black text-pink-400 mb-2">10+</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Categorii de mașini</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-black text-purple-400 mb-2">2</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Zile de eveniment</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-black text-orange-400 mb-2">5+</div>
-              <div className="text-sm text-gray-400 uppercase tracking-wide">Premii de câștigat</div>
-            </div>
           </div>
         </div>
       </section>
