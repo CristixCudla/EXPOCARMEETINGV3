@@ -72,9 +72,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="font-logo-cyberpunk text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider">
-              <span className="text-[#ec4899] logo-pulsar">EXPO</span>
+              <span className="text-[#ec4899] logo-pulsar-color">EXPO</span>
               <span className="text-white"> CAR </span>
-              <span className="text-[#06b6d4]">MEETING</span>
+              <span className="text-[#06b6d4]">MEET<span className="sparkle-text">ING</span></span>
             </span>
           </Link>
           
