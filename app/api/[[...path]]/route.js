@@ -73,6 +73,23 @@ export async function POST(request) {
       
       if (error) throw error
       
+      // IMPORTANT: Create profile immediately after registration
+      if (authData.user) {
+        const { error: profileError } = await supabaseAdmin
+          .from('profiles')
+          .insert({
+            id: authData.user.id,
+            email: authData.user.email,
+            full_name: full_name || '',
+            role: 'user'
+          })
+        
+        if (profileError) {
+          console.error('Error creating profile:', profileError)
+          // Don't throw error - profile might already exist
+        }
+      }
+      
       return NextResponse.json({ 
         success: true, 
         user: authData.user
