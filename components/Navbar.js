@@ -14,6 +14,7 @@ import {
 import { Car, Trophy, Ticket, LogIn, UserPlus, LogOut, LayoutDashboard, User, Menu } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 export default function Navbar() {
@@ -71,11 +72,19 @@ export default function Navbar() {
       <div className="px-4 md:px-5 lg:px-10 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-logo-cyberpunk text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider">
-              <span className="text-[#ec4899] logo-pulsar-color">EXPO</span>
-              <span className="text-white"> CAR </span>
-              <span className="text-[#06b6d4]">MEET<span className="sparkle-text">ING</span></span>
-            </span>
+            <div className="relative">
+              <Image 
+                src="/logo-expo-transparent.png" 
+                alt="EXPO CAR MEETING" 
+                width={280} 
+                height={60}
+                className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain"
+                priority
+                style={{ 
+                  filter: 'brightness(1.05) contrast(1.1) drop-shadow(0 0 12px rgba(6, 182, 212, 0.3))'
+                }}
+              />
+            </div>
           </Link>
           
           <div className="flex items-center gap-2 md:gap-3">
