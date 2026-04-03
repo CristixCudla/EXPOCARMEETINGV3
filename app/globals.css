@@ -185,6 +185,32 @@ html {
   }
 }
 
+/* Animație Pulsar pentru Logo EXPO */
+@keyframes pulsar {
+  0%, 100% {
+    text-shadow: 
+      0 0 10px rgba(236, 72, 153, 0.8),
+      0 0 20px rgba(236, 72, 153, 0.6),
+      0 0 30px rgba(236, 72, 153, 0.4),
+      0 0 40px rgba(236, 72, 153, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 
+      0 0 20px rgba(236, 72, 153, 1),
+      0 0 30px rgba(236, 72, 153, 0.8),
+      0 0 40px rgba(236, 72, 153, 0.6),
+      0 0 60px rgba(236, 72, 153, 0.4),
+      0 0 80px rgba(236, 72, 153, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+.logo-pulsar {
+  animation: pulsar 2s ease-in-out infinite;
+  display: inline-block;
+}
+
 /* ╭─────────────────────────────────────────────────────────────────────────╮
    │  CLASE TIPOGRAFIE NEON                                                  │
    ╰─────────────────────────────────────────────────────────────────────────╯ */

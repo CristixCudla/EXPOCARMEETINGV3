@@ -72,7 +72,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span style={{ fontFamily: 'var(--font-orbitron)' }} className="text-xl md:text-2xl font-black tracking-wider">
-              <span className="text-[#ec4899]">EXPO</span>
+              <span className="text-[#ec4899] logo-pulsar">EXPO</span>
               <span className="text-white"> CAR </span>
               <span className="text-[#06b6d4]">MEETING</span>
             </span>

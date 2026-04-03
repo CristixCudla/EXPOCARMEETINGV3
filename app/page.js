@@ -5,9 +5,10 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Car, Trophy, Users, Calendar, Clock, MapPin } from 'lucide-react'
+import { Car, Trophy, Users, Calendar, Clock, MapPin, ArrowRight, Infinity, MessageCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function HomePage() {
   const [user, setUser] = useState(null)
@@ -17,6 +18,10 @@ export default function HomePage() {
   const [sponsors, setSponsors] = useState([])
   const [userVote, setUserVote] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState({
+    totalCars: 0,
+    acceptedCars: 0
+  })
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -75,6 +80,19 @@ export default function HomePage() {
 
   async function loadPublicData() {
     try {
+      // Load stats
+      const { data: carsData } = await supabase
+        .from('cars')
+        .select('*')
+      
+      const acceptedCars = carsData?.filter(c => c.status === 'accepted') || []
+      
+      setStats({
+        totalCars: carsData?.length || 0,
+        acceptedCars: acceptedCars.length
+      })
+
+      // Load schedule
       const { data: scheduleData, error: scheduleError } = await supabase
         .from('event_schedule')
         .select('*')
@@ -83,39 +101,28 @@ export default function HomePage() {
       if (scheduleError) throw scheduleError
       setEventSchedule(scheduleData || [])
 
-      const { data: carsData, error: carsError } = await supabase
+      // Load best cars
+      const { data: bestCarsData, error: carsError } = await supabase
         .from('cars')
         .select('*')
         .eq('is_best_car_nominee', true)
         .eq('status', 'accepted')
-        .limit(3)
+        .limit(6)
       
       if (carsError) throw carsError
-      
-      if (carsData) {
-        const carsWithVotes = await Promise.all(
-          carsData.map(async (car) => {
-            const { count } = await supabase
-              .from('votes')
-              .select('*', { count: 'exact', head: true })
-              .eq('car_id', car.id)
-            return { ...car, voteCount: count || 0 }
-          })
-        )
-        setBestCars(carsWithVotes)
-      }
+      setBestCars(bestCarsData || [])
 
+      // Load sponsors
       const { data: sponsorsData, error: sponsorsError } = await supabase
         .from('sponsors')
         .select('*')
-        .order('display_order', { ascending: true })
       
       if (sponsorsError) throw sponsorsError
       setSponsors(sponsorsData || [])
 
       setLoading(false)
     } catch (error) {
-      console.error('Error loading public data:', error)
+      console.error('Error loading data:', error)
       setLoading(false)
     }
   }
@@ -135,137 +142,374 @@ export default function HomePage() {
       const { error } = await supabase
         .from('votes')
         .insert({ user_id: user.id, car_id: carId })
-      
+
       if (error) throw error
-      
-      toast.success('Votul tău a fost înregistrat! 🎉')
+
       setUserVote({ car_id: carId })
-      loadPublicData()
+      toast.success('Votul tău a fost înregistrat!')
     } catch (error) {
       console.error('Error voting:', error)
-      toast.error('Eroare la înregistrarea votului')
+      toast.error('Eroare la votare')
     }
   }
 
-
   return (
     <div className="min-h-screen bg-black text-white">
-      <section className="relative h-screen flex items-center justify-center pt-16">
-        <div className="relative z-20 text-center px-5 md:px-10 max-w-5xl mx-auto">
-          <p className="section-label mb-6">
+      {/* Hero Section cu fundal */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image Overlay */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.4
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black"></div>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-20 text-center px-5 md:px-10 max-w-5xl mx-auto pt-20">
+          <p className="section-label mb-6 text-cyan-400">
             <MapPin className="inline w-3 h-3 mr-2" />FĂLTICENI • NADA FLORILOR — 2026
           </p>
-          <h1 className="display-heading mb-6">
-            UNDE <span className="italic-subtitle">PASIUNEA</span><br />
-            &amp; PERFORMANȚA<br />
-            SE ÎNTÂLNESC
+          <h1 className="display-heading mb-8 text-5xl md:text-7xl lg:text-8xl font-black leading-tight">
+            UNDE <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">PASIUNEA</span><br />
+            & PERFORMANȚA<br />
+            <span className="text-5xl md:text-6xl lg:text-7xl">SE ÎNTÂLNESC</span>
           </h1>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-4 justify-center mt-8">
             <Link href={user ? "/register-car" : "/auth/register"}>
-              <Button size="lg" className="btn-neon px-8 py-6">ÎNSCRIERE ACUM</Button>
+              <Button size="lg" className="btn-neon px-8 py-6 text-lg">ÎNSCRIERE ACUM</Button>
+            </Link>
+            <Link href="#best-cars">
+              <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-8 py-6 text-lg">
+                VEZI MAȘINILE <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {bestCars.length > 0 && (
-        <section id="best-cars" className="relative z-10 py-16 px-5">
-          <div className="max-w-5xl mx-auto">
-            <p className="section-label text-center mb-8">BEST CAR OF THE SHOW</p>
-            <h2 className="text-4xl font-black text-center mb-12 uppercase">
-              VOTEAZĂ <span className="italic-subtitle">MAȘINA</span>
+      {/* Secțiune Statistici */}
+      <section className="py-20 px-5 md:px-10 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-4">
+            <span className="deco-symbol">✦ ✦ ✦</span>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            {/* Coloana 1: Mașini */}
+            <div className="text-center space-y-4 border-accent-right">
+              <div className="space-y-2">
+                <div className="text-7xl md:text-8xl font-black text-white">
+                  {stats.totalCars}+
+                </div>
+                <div className="text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold">
+                  Mașini Înscrise
+                </div>
+              </div>
+              <div className="space-y-1 pt-4 border-t border-white/10">
+                <div className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 text-sm uppercase tracking-wide font-bold">
+                  Build-uri confirmate
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm uppercase tracking-wider text-gray-500">
+                  Mașini Acceptate
+                </div>
+              </div>
+            </div>
+
+            {/* Coloana 2: Pasionați */}
+            <div className="text-center space-y-4">
+              <div className="space-y-2">
+                <div className="text-7xl md:text-8xl font-black text-white flex items-center justify-center">
+                  <Infinity className="w-24 h-24 md:w-32 md:h-32" />
+                </div>
+                <div className="text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold">
+                  Pasionați
+                </div>
+              </div>
+            </div>
+
+            {/* Coloana 3: Zile */}
+            <div className="text-center space-y-4 border-accent-left">
+              <div className="space-y-2">
+                <div className="text-7xl md:text-8xl font-black text-white">
+                  2
+                </div>
+                <div className="text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold">
+                  Zile Pline
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Secțiune Despre Eveniment */}
+      <section className="py-20 px-5 md:px-10 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="section-label mb-4 text-cyan-400">Despre Eveniment</p>
+            <span className="deco-symbol">✦ ✦ ✦</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+            {/* Coloana 1: Show Auto */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-5xl md:text-6xl font-black text-white mb-2">
+                  SHOW AUTO
+                </h2>
+                <p className="text-2xl md:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+                  & Concursuri
+                </p>
+              </div>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
+              </p>
+            </div>
+
+            {/* Coloana 2: Comunitate */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-5xl md:text-6xl font-black text-white mb-2">
+                  COMUNITATE
+                </h2>
+                <p className="text-2xl md:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+                  & Pasiune
+                </p>
+              </div>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și înscrie-ți mașina.
+              </p>
+              <a 
+                href="https://chat.whatsapp.com/Ihk01gdppgY7bXkbfXLZ53" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block"
+              >
+                <Button 
+                  size="lg" 
+                  className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold px-8 py-6 rounded-full"
+                >
+                  <MessageCircle className="mr-2 w-5 h-5" />
+                  GRUP WHATSAPP
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Secțiune Galerie & Mașini */}
+      <section id="best-cars" className="py-20 px-5 md:px-10 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="section-label mb-4 text-cyan-400">Galerie & Mașini</p>
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-4">
+              MAȘINI
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <p className="text-3xl md:text-4xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-6">
+              Acceptate
+            </p>
+            <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
+              Descoperă mașinile confirmate pentru eveniment. Galerie completă cu toate build-urile care vor fi prezente la Nada Florilor în 6–7 Iunie 2026.
+            </p>
+            <Link href="/dashboard">
+              <Button variant="outline" size="lg" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
+                VEZI TOATE MAȘINILE <ArrowRight className="ml-2" />
+              </Button>
+            </Link>
+          </div>
+
+          {/* Grid Mașini */}
+          {bestCars.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
               {bestCars.map((car) => (
-                <Card key={car.id} className="neon-card overflow-hidden">
-                  <div className="relative h-48">
-                    {car.images?.[0] ? (
-                      <img src={car.images[0]} alt={car.make} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-pink-500/20 to-cyan-500/20 flex items-center justify-center">
-                        <Car className="w-16 h-16 text-gray-400" />
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-6">
-                    <h4 className="text-2xl font-bold mb-2">{car.make} {car.model}</h4>
-                    {car.year && <p className="text-sm text-white/50 mb-4">An: {car.year}</p>}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm text-white/50">
-                        <Trophy className="w-4 h-4 inline mr-1" />{car.voteCount} voturi
-                      </span>
-                      {userVote?.car_id === car.id && (
-                        <Badge className="text-green-400 border-green-400">✓ Ai votat</Badge>
-                      )}
+                <Card key={car.id} className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl overflow-hidden hover:scale-105 transition-transform duration-300">
+                  {car.images && car.images[0] && (
+                    <div className="aspect-video relative overflow-hidden">
+                      <img 
+                        src={car.images[0]} 
+                        alt={`${car.make} ${car.model}`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <Button
-                      onClick={() => handleVote(car.id)}
-                      disabled={!user || userVote}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
-                    >
-                      {!user ? 'Autentifică-te' : userVote?.car_id === car.id ? 'Votul tău' : userVote ? 'Ai votat' : 'Votează'}
-                    </Button>
+                  )}
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      {car.make} {car.model}
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                      {car.description}
+                    </p>
+                    {user && !userVote && (
+                      <Button 
+                        onClick={() => handleVote(car.id)}
+                        size="sm"
+                        className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                      >
+                        <Trophy className="w-4 h-4 mr-2" />
+                        Votează
+                      </Button>
+                    )}
+                    {userVote?.car_id === car.id && (
+                      <Badge className="w-full justify-center bg-green-500/20 text-green-400 border-green-400">
+                        Votat ✓
+                      </Badge>
+                    )}
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          )}
 
-      {eventSchedule.length > 0 && (
-        <section className="relative z-10 py-16 px-5">
-          <div className="max-w-5xl mx-auto">
-            <p className="section-label text-center mb-8">EVENIMENT</p>
-            <h2 className="text-4xl font-black text-center mb-12 uppercase">
-              <span className="italic-subtitle">PROGRAM</span> COMPLET
+          {/* Statistici Scurte */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+            <div className="text-center">
+              <div className="text-4xl font-black text-cyan-400 mb-2">{stats.acceptedCars}</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Build-uri confirmate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-pink-400 mb-2">10+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Categorii de mașini</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-purple-400 mb-2">2</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Zile de eveniment</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-orange-400 mb-2">5+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Premii de câștigat</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Secțiune Program */}
+      <section className="py-20 px-5 md:px-10 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="section-label mb-4 text-cyan-400">Eveniment</p>
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-4">
+              PROGRAM
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <p className="text-3xl md:text-4xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-6">
+              Complet
+            </p>
+            <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+              Vezi toate activitățile planificate pentru cele 2 zile de eveniment — orele exacte, detalii și tot ce trebuie să știi.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/30 backdrop-blur-xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <Calendar className="w-8 h-8 text-pink-400" />
+                <div>
+                  <p className="text-sm text-gray-400 uppercase tracking-wide">Data</p>
+                  <p className="text-2xl font-bold text-white">6–7 Iunie 2026</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30 backdrop-blur-xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="w-8 h-8 text-cyan-400" />
+                <div>
+                  <p className="text-sm text-gray-400 uppercase tracking-wide">Ore</p>
+                  <p className="text-2xl font-bold text-white">În Curând</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {eventSchedule.length > 0 && (
+            <div className="mt-12 space-y-4 max-w-4xl mx-auto">
               {eventSchedule.map((item) => (
-                <Card key={item.id} className="neon-card p-6">
-                  <Badge className="text-cyan-400 border-cyan-400 mb-2">
-                    {new Date(item.date).toLocaleDateString('ro-RO')} • {item.time}
-                  </Badge>
-                  <h4 className="text-xl font-bold mb-2">{item.title}</h4>
-                  {item.description && <p className="text-sm text-white/60">{item.description}</p>}
+                <Card key={item.id} className="bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 backdrop-blur-xl p-6 hover:border-cyan-400/50 transition-colors">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-400">
+                        {new Date(item.date).toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' })}
+                      </Badge>
+                    </div>
+                    <div className="flex-grow">
+                      <h4 className="text-lg font-bold text-white mb-1">{item.title}</h4>
+                      <p className="text-gray-400 text-sm">{item.description}</p>
+                      {item.time && (
+                        <p className="text-cyan-400 text-sm mt-2">
+                          <Clock className="inline w-4 h-4 mr-1" />
+                          {item.time}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </Card>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
+      {/* Secțiune Sponsori */}
       {sponsors.length > 0 && (
-        <section className="relative z-10 py-16 px-5">
-          <div className="max-w-5xl mx-auto">
-            <p className="section-label text-center mb-8">PARTENERI</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <section className="py-20 px-5 md:px-10 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="section-label mb-4 text-cyan-400 uppercase tracking-widest">Partener Oficial</p>
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center gap-12">
               {sponsors.map((sponsor) => (
-                <a key={sponsor.id} href={sponsor.website_url} target="_blank" rel="noopener noreferrer">
-                  <Card className="neon-card p-6 hover:border-orange-500/50">
-                    <div className="flex flex-col items-center min-h-[120px] justify-center">
-                      {sponsor.logo_url ? (
-                        <img src={sponsor.logo_url} alt={sponsor.name} className="max-h-16 object-contain mb-3" />
-                      ) : (
-                        <div className="w-16 h-16 bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-full mb-3" />
-                      )}
-                      <p className="text-sm font-semibold text-center">{sponsor.name}</p>
+                <div key={sponsor.id} className="text-center space-y-4">
+                  {sponsor.logo_url && (
+                    <div className="relative w-64 h-64 mx-auto mb-6">
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-full blur-3xl"></div>
+                      <img 
+                        src={sponsor.logo_url}
+                        alt={sponsor.name}
+                        className="relative w-full h-full object-contain"
+                      />
                     </div>
-                  </Card>
-                </a>
+                  )}
+                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider">
+                    {sponsor.name}
+                  </h3>
+                  <p className="text-gray-400">
+                    Partener oficial al Expo Car Meeting 2026
+                  </p>
+                  {sponsor.website_url && (
+                    <a 
+                      href={sponsor.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block"
+                    >
+                      <Button variant="outline" className="border-orange-400 text-orange-400 hover:bg-orange-400/10 mt-4">
+                        Vizitează Website
+                      </Button>
+                    </a>
+                  )}
+                </div>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      <footer className="relative z-10 border-t border-white/10 py-8 text-center">
-        <span style={{ fontFamily: 'var(--font-orbitron)' }} className="text-xl font-black block mb-4">
-          <span className="text-[#ec4899]">EXPO</span>
-          <span className="text-white"> CAR </span>
-          <span className="text-[#06b6d4]">MEETING</span>
-        </span>
-        <p className="text-sm text-white/50">© 2026 Expo Car Meeting</p>
+      {/* Footer */}
+      <footer className="py-12 px-5 md:px-10 border-t border-white/10 relative z-10">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-500 text-sm">
+            © 2026 Expo Car Meeting. Toate drepturile rezervate.
+          </p>
+        </div>
       </footer>
     </div>
   )
