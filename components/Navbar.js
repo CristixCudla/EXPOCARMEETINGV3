@@ -68,26 +68,26 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-b border-white/10">
-      <div className="px-5 md:px-10 py-4">
+      <div className="px-4 md:px-5 lg:px-10 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-logo-cyberpunk text-xl md:text-2xl tracking-wider">
+            <span className="font-logo-cyberpunk text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider">
               <span className="text-[#ec4899] logo-pulsar">EXPO</span>
               <span className="text-white"> CAR </span>
               <span className="text-[#06b6d4]">MEETING</span>
             </span>
           </Link>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 gap-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-pink-500 flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 gap-1 md:gap-2 px-2 md:px-3">
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gradient-to-br from-cyan-500 to-pink-500 flex items-center justify-center">
+                      <User className="w-3 h-3 md:w-4 md:h-4 text-white" />
                     </div>
-                    <span className="hidden md:inline">{userProfile?.full_name || 'Cont'}</span>
-                    <Menu className="w-4 h-4" />
+                    <span className="hidden sm:inline text-xs md:text-sm">{userProfile?.full_name || 'Cont'}</span>
+                    <Menu className="w-3 h-3 md:w-4 md:h-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-black/95 border-white/20 text-white">
@@ -145,15 +145,15 @@ export default function Navbar() {
             ) : (
               <>
                 <Link href="/auth/login">
-                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
-                    <LogIn className="w-4 h-4 mr-2" />
-                    <span className="hidden md:inline">Login</span>
+                  <Button variant="outline" size="sm" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-3 md:px-4 text-xs md:text-sm">
+                    <LogIn className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+                    <span className="hidden sm:inline">Login</span>
                   </Button>
                 </Link>
                 <Link href="/auth/register">
-                  <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    <span className="hidden md:inline">Register</span>
+                  <Button size="sm" className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 px-3 md:px-4 text-xs md:text-sm">
+                    <UserPlus className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+                    <span className="hidden sm:inline">Register</span>
                   </Button>
                 </Link>
               </>
