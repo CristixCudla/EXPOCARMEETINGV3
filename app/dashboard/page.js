@@ -328,10 +328,32 @@ export default function DashboardPage() {
     const formData = new FormData(e.target)
     
     try {
+      let logoUrl = ''
+      const logoFile = formData.get('logo_file')
+      
+      // Upload logo to Supabase Storage
+      if (logoFile && logoFile.size > 0) {
+        const fileExt = logoFile.name.split('.').pop()
+        const fileName = `${Math.random()}.${fileExt}`
+        const filePath = `sponsor-logos/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('car-images')
+          .upload(filePath, logoFile)
+
+        if (uploadError) throw uploadError
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('car-images')
+          .getPublicUrl(filePath)
+
+        logoUrl = publicUrl
+      }
+
       const { error } = await supabase.from('sponsors').insert({
         name: formData.get('name'),
         website_url: formData.get('website_url'),
-        logo_url: formData.get('logo_url'),
+        logo_url: logoUrl,
         display_order: parseInt(formData.get('display_order') || 0)
       })
 
@@ -723,8 +745,15 @@ export default function DashboardPage() {
                         <Input name="website_url" type="url" className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className="text-gray-200">Logo URL</Label>
-                        <Input name="logo_url" required className="bg-white/5 border-white/20 text-white" />
+                        <Label className="text-gray-200">Logo (Poză)</Label>
+                        <Input 
+                          name="logo_file" 
+                          type="file" 
+                          accept="image/*" 
+                          required 
+                          className="bg-white/5 border-white/20 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600" 
+                        />
+                        <p className="text-xs text-gray-400 mt-1">Acceptă: PNG, JPG, WEBP (max 5MB)</p>
                       </div>
                       <div>
                         <Label className="text-gray-200">Ordinea afișării</Label>
