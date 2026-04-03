@@ -321,8 +321,8 @@ export default function HomePage() {
             <p className="text-gray-300 text-lg max-w-3xl mx-auto mb-8">
               Descoperă mașinile confirmate pentru eveniment. Galerie completă cu toate build-urile care vor fi prezente la Nada Florilor în 6–7 Iunie 2026.
             </p>
-            <Link href="/dashboard">
-              <Button variant="outline" size="lg" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10">
+            <Link href="/masini">
+              <Button variant="outline" size="lg" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 font-bold">
                 VEZI TOATE MAȘINILE <ArrowRight className="ml-2" />
               </Button>
             </Link>
