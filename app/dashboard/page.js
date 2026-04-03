@@ -263,8 +263,8 @@ export default function DashboardPage() {
 
   if (loading || !user || !userProfile) {
     return (
-      <div className=\"min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] flex items-center justify-center\">
-        <div className=\"text-white\">Se încarcă...</div>
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] flex items-center justify-center">
+        <div className="text-white">Se încarcă...</div>
       </div>
     )
   }
@@ -272,20 +272,20 @@ export default function DashboardPage() {
   const isAdmin = userProfile.role === 'admin'
 
   return (
-    <div className=\"min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] relative overflow-hidden py-8 px-4\">
-      <div className=\"particle-bg\">
-        <div className=\"absolute inset-0 bg-[url('/grid.svg')] opacity-10\"></div>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] relative overflow-hidden py-8 px-4">
+      <div className="particle-bg">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
       </div>
 
-      <div className=\"relative z-10 max-w-7xl mx-auto\">
-        <div className=\"mb-6 flex items-center justify-between\">
-          <Link href=\"/\">
-            <Button variant=\"ghost\" className=\"text-cyan-400 hover:text-cyan-300\">
-              <ArrowLeft className=\"w-4 h-4 mr-2\" />
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="mb-6 flex items-center justify-between">
+          <Link href="/">
+            <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
+              <ArrowLeft className="w-4 h-4 mr-2" />
               Înapoi la Home
             </Button>
           </Link>
-          <Badge variant=\"outline\" className=\"text-cyan-400 border-cyan-400\">
+          <Badge variant="outline" className="text-cyan-400 border-cyan-400">
             {isAdmin ? 'Admin' : 'Organizator'}
           </Badge>
         </div>
@@ -294,15 +294,15 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className=\"bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl mb-6\">
+          <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl mb-6">
             <CardHeader>
-              <div className=\"flex items-center gap-3\">
-                <div className=\"glow-box rounded-full p-3 bg-gradient-to-br from-cyan-500 to-pink-500\">
-                  <LayoutDashboard className=\"w-6 h-6 text-white\" />
+              <div className="flex items-center gap-3">
+                <div className="glow-box rounded-full p-3 bg-gradient-to-br from-cyan-500 to-pink-500">
+                  <LayoutDashboard className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <CardTitle className=\"text-2xl font-bold gradient-text\">Dashboard {isAdmin ? 'Admin' : 'Organizator'}</CardTitle>
-                  <CardDescription className=\"text-gray-400\">
+                  <CardTitle className="text-2xl font-bold gradient-text">Dashboard {isAdmin ? 'Admin' : 'Organizator'}</CardTitle>
+                  <CardDescription className="text-gray-400">
                     {isAdmin ? 'Control complet al evenimentului' : 'Gestionează ticket-urile de suport'}
                   </CardDescription>
                 </div>
@@ -310,62 +310,62 @@ export default function DashboardPage() {
             </CardHeader>
           </Card>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className=\"space-y-6\">
-            <TabsList className=\"bg-white/5 border border-white/10\">
-              {isAdmin && <TabsTrigger value=\"overview\">Overview</TabsTrigger>}
-              {isAdmin && <TabsTrigger value=\"users\">Utilizatori</TabsTrigger>}
-              {isAdmin && <TabsTrigger value=\"cars\">Mașini</TabsTrigger>}
-              {isAdmin && <TabsTrigger value=\"best-car\">Best Car</TabsTrigger>}
-              {isAdmin && <TabsTrigger value=\"schedule\">Program</TabsTrigger>}
-              {isAdmin && <TabsTrigger value=\"sponsors\">Sponsori</TabsTrigger>}
-              <TabsTrigger value=\"tickets\">Support Tickets</TabsTrigger>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList className="bg-white/5 border border-white/10">
+              {isAdmin && <TabsTrigger value="overview">Overview</TabsTrigger>}
+              {isAdmin && <TabsTrigger value="users">Utilizatori</TabsTrigger>}
+              {isAdmin && <TabsTrigger value="cars">Mașini</TabsTrigger>}
+              {isAdmin && <TabsTrigger value="best-car">Best Car</TabsTrigger>}
+              {isAdmin && <TabsTrigger value="schedule">Program</TabsTrigger>}
+              {isAdmin && <TabsTrigger value="sponsors">Sponsori</TabsTrigger>}
+              <TabsTrigger value="tickets">Support Tickets</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
             {isAdmin && (
-              <TabsContent value=\"overview\" className=\"space-y-6\">
-                <div className=\"grid md:grid-cols-4 gap-4\">
-                  <Card className=\"bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-400/30\">
-                    <CardContent className=\"p-6\">
-                      <div className=\"flex items-center justify-between\">
+              <TabsContent value="overview" className="space-y-6">
+                <div className="grid md:grid-cols-4 gap-4">
+                  <Card className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-cyan-400/30">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <p className=\"text-sm text-gray-400\">Total Utilizatori</p>
-                          <p className=\"text-3xl font-bold text-white\">{users.length}</p>
+                          <p className="text-sm text-gray-400">Total Utilizatori</p>
+                          <p className="text-3xl font-bold text-white">{users.length}</p>
                         </div>
-                        <Users className=\"w-12 h-12 text-cyan-400 opacity-50\" />
+                        <Users className="w-12 h-12 text-cyan-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className=\"bg-gradient-to-br from-pink-500/20 to-orange-500/20 border-pink-400/30\">
-                    <CardContent className=\"p-6\">
-                      <div className=\"flex items-center justify-between\">
+                  <Card className="bg-gradient-to-br from-pink-500/20 to-orange-500/20 border-pink-400/30">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <p className=\"text-sm text-gray-400\">Total Mașini</p>
-                          <p className=\"text-3xl font-bold text-white\">{cars.length}</p>
+                          <p className="text-sm text-gray-400">Total Mașini</p>
+                          <p className="text-3xl font-bold text-white">{cars.length}</p>
                         </div>
-                        <Car className=\"w-12 h-12 text-pink-400 opacity-50\" />
+                        <Car className="w-12 h-12 text-pink-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className=\"bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-400/30\">
-                    <CardContent className=\"p-6\">
-                      <div className=\"flex items-center justify-between\">
+                  <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-400/30">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <p className=\"text-sm text-gray-400\">Mașini Acceptate</p>
-                          <p className=\"text-3xl font-bold text-white\">{cars.filter(c => c.status === 'accepted').length}</p>
+                          <p className="text-sm text-gray-400">Mașini Acceptate</p>
+                          <p className="text-3xl font-bold text-white">{cars.filter(c => c.status === 'accepted').length}</p>
                         </div>
-                        <Trophy className=\"w-12 h-12 text-yellow-400 opacity-50\" />
+                        <Trophy className="w-12 h-12 text-yellow-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
-                  <Card className=\"bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30\">
-                    <CardContent className=\"p-6\">
-                      <div className=\"flex items-center justify-between\">
+                  <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <p className=\"text-sm text-gray-400\">Tickets Deschise</p>
-                          <p className=\"text-3xl font-bold text-white\">{tickets.filter(t => t.status === 'open').length}</p>
+                          <p className="text-sm text-gray-400">Tickets Deschise</p>
+                          <p className="text-3xl font-bold text-white">{tickets.filter(t => t.status === 'open').length}</p>
                         </div>
-                        <Ticket className=\"w-12 h-12 text-purple-400 opacity-50\" />
+                        <Ticket className="w-12 h-12 text-purple-400 opacity-50" />
                       </div>
                     </CardContent>
                   </Card>
@@ -375,28 +375,28 @@ export default function DashboardPage() {
 
             {/* Users Tab */}
             {isAdmin && (
-              <TabsContent value=\"users\">
-                <Card className=\"bg-white/5 border-white/10\">
+              <TabsContent value="users">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Utilizatori Înregistrați</CardTitle>
+                    <CardTitle className="text-white">Utilizatori Înregistrați</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Table>
                       <TableHeader>
-                        <TableRow className=\"border-white/10\">
-                          <TableHead className=\"text-gray-400\">Nume</TableHead>
-                          <TableHead className=\"text-gray-400\">Email</TableHead>
-                          <TableHead className=\"text-gray-400\">Rol</TableHead>
-                          <TableHead className=\"text-gray-400\">Creat la</TableHead>
+                        <TableRow className="border-white/10">
+                          <TableHead className="text-gray-400">Nume</TableHead>
+                          <TableHead className="text-gray-400">Email</TableHead>
+                          <TableHead className="text-gray-400">Rol</TableHead>
+                          <TableHead className="text-gray-400">Creat la</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {users.map((user) => (
-                          <TableRow key={user.id} className=\"border-white/10\">
-                            <TableCell className=\"text-white\">{user.full_name || 'N/A'}</TableCell>
-                            <TableCell className=\"text-gray-400\">{user.email}</TableCell>
+                          <TableRow key={user.id} className="border-white/10">
+                            <TableCell className="text-white">{user.full_name || 'N/A'}</TableCell>
+                            <TableCell className="text-gray-400">{user.email}</TableCell>
                             <TableCell>
-                              <Badge variant=\"outline\" className={
+                              <Badge variant="outline" className={
                                 user.role === 'admin' ? 'border-pink-400 text-pink-400' :
                                 user.role === 'organizer' ? 'border-yellow-400 text-yellow-400' :
                                 'border-cyan-400 text-cyan-400'
@@ -404,7 +404,7 @@ export default function DashboardPage() {
                                 {user.role}
                               </Badge>
                             </TableCell>
-                            <TableCell className=\"text-gray-400\">
+                            <TableCell className="text-gray-400">
                               {new Date(user.created_at).toLocaleDateString('ro-RO')}
                             </TableCell>
                           </TableRow>
@@ -418,26 +418,26 @@ export default function DashboardPage() {
 
             {/* Cars Tab */}
             {isAdmin && (
-              <TabsContent value=\"cars\">
-                <Card className=\"bg-white/5 border-white/10\">
+              <TabsContent value="cars">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Gestionare Mașini</CardTitle>
+                    <CardTitle className="text-white">Gestionare Mașini</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className=\"space-y-4\">
+                    <div className="space-y-4">
                       {cars.map((car) => (
-                        <Card key={car.id} className=\"bg-white/5 border-white/10\">
-                          <CardContent className=\"p-4\">
-                            <div className=\"flex items-start gap-4\">
+                        <Card key={car.id} className="bg-white/5 border-white/10">
+                          <CardContent className="p-4">
+                            <div className="flex items-start gap-4">
                               {car.images && car.images.length > 0 && (
-                                <img src={car.images[0]} alt={`${car.make} ${car.model}`} className=\"w-24 h-24 object-cover rounded-lg\" />
+                                <img src={car.images[0]} alt={`${car.make} ${car.model}`} className="w-24 h-24 object-cover rounded-lg" />
                               )}
-                              <div className=\"flex-1\">
-                                <h4 className=\"text-lg font-bold text-white\">{car.make} {car.model}</h4>
-                                {car.year && <p className=\"text-sm text-gray-400\">An: {car.year}</p>}
-                                <p className=\"text-sm text-gray-400 mt-1\">{car.description}</p>
-                                <div className=\"flex items-center gap-2 mt-3\">
-                                  <Badge variant=\"outline\" className={
+                              <div className="flex-1">
+                                <h4 className="text-lg font-bold text-white">{car.make} {car.model}</h4>
+                                {car.year && <p className="text-sm text-gray-400">An: {car.year}</p>}
+                                <p className="text-sm text-gray-400 mt-1">{car.description}</p>
+                                <div className="flex items-center gap-2 mt-3">
+                                  <Badge variant="outline" className={
                                     car.status === 'accepted' ? 'border-green-400 text-green-400' :
                                     car.status === 'rejected' ? 'border-red-400 text-red-400' :
                                     'border-yellow-400 text-yellow-400'
@@ -445,22 +445,22 @@ export default function DashboardPage() {
                                     {car.status}
                                   </Badge>
                                   {car.is_best_car_nominee && (
-                                    <Badge className=\"bg-gradient-to-r from-yellow-500 to-orange-500\">
-                                      <Star className=\"w-3 h-3 mr-1\" />
+                                    <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
+                                      <Star className="w-3 h-3 mr-1" />
                                       Best Car Nominee
                                     </Badge>
                                   )}
                                 </div>
                               </div>
-                              <div className=\"flex flex-col gap-2\">
+                              <div className="flex flex-col gap-2">
                                 {car.status === 'pending' && (
                                   <>
-                                    <Button size=\"sm\" onClick={() => handleCarStatusUpdate(car.id, 'accepted')} className=\"bg-green-500 hover:bg-green-600\">
-                                      <Check className=\"w-4 h-4 mr-1\" />
+                                    <Button size="sm" onClick={() => handleCarStatusUpdate(car.id, 'accepted')} className="bg-green-500 hover:bg-green-600">
+                                      <Check className="w-4 h-4 mr-1" />
                                       Acceptă
                                     </Button>
-                                    <Button size=\"sm\" variant=\"destructive\" onClick={() => handleCarStatusUpdate(car.id, 'rejected')}>
-                                      <X className=\"w-4 h-4 mr-1\" />
+                                    <Button size="sm" variant="destructive" onClick={() => handleCarStatusUpdate(car.id, 'rejected')}>
+                                      <X className="w-4 h-4 mr-1" />
                                       Respinge
                                     </Button>
                                   </>
@@ -478,33 +478,33 @@ export default function DashboardPage() {
 
             {/* Best Car Tab */}
             {isAdmin && (
-              <TabsContent value=\"best-car\">
-                <Card className=\"bg-white/5 border-white/10\">
+              <TabsContent value="best-car">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Selectare Best Car of the Show (Max 3)</CardTitle>
-                    <CardDescription className=\"text-gray-400\">Selectează exact 3 mașini pentru votare publică</CardDescription>
+                    <CardTitle className="text-white">Selectare Best Car of the Show (Max 3)</CardTitle>
+                    <CardDescription className="text-gray-400">Selectează exact 3 mașini pentru votare publică</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className=\"space-y-4\">
+                    <div className="space-y-4">
                       {cars.filter(c => c.status === 'accepted').map((car) => (
                         <Card key={car.id} className={`bg-white/5 border-white/10 ${car.is_best_car_nominee ? 'border-yellow-400' : ''}`}>
-                          <CardContent className=\"p-4\">
-                            <div className=\"flex items-center justify-between\">
-                              <div className=\"flex items-center gap-4\">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4">
                                 {car.images && car.images.length > 0 && (
-                                  <img src={car.images[0]} alt={`${car.make} ${car.model}`} className=\"w-16 h-16 object-cover rounded-lg\" />
+                                  <img src={car.images[0]} alt={`${car.make} ${car.model}`} className="w-16 h-16 object-cover rounded-lg" />
                                 )}
                                 <div>
-                                  <h4 className=\"text-lg font-bold text-white\">{car.make} {car.model}</h4>
-                                  {car.year && <p className=\"text-sm text-gray-400\">An: {car.year}</p>}
+                                  <h4 className="text-lg font-bold text-white">{car.make} {car.model}</h4>
+                                  {car.year && <p className="text-sm text-gray-400">An: {car.year}</p>}
                                 </div>
                               </div>
                               <Button
                                 onClick={() => handleToggleBestCar(car.id, car.is_best_car_nominee)}
-                                variant={car.is_best_car_nominee ? \"default\" : \"outline\"}
+                                variant={car.is_best_car_nominee ? "default" : "outline"}
                                 className={car.is_best_car_nominee ? 'bg-gradient-to-r from-yellow-500 to-orange-500' : ''}
                               >
-                                <Star className=\"w-4 h-4 mr-2\" />
+                                <Star className="w-4 h-4 mr-2" />
                                 {car.is_best_car_nominee ? 'Eliminat din Best Car' : 'Adaugă la Best Car'}
                               </Button>
                             </div>
@@ -519,57 +519,57 @@ export default function DashboardPage() {
 
             {/* Schedule Tab */}
             {isAdmin && (
-              <TabsContent value=\"schedule\" className=\"space-y-6\">
-                <Card className=\"bg-white/5 border-white/10\">
+              <TabsContent value="schedule" className="space-y-6">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Adaugă Eveniment</CardTitle>
+                    <CardTitle className="text-white">Adaugă Eveniment</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <form onSubmit={handleCreateSchedule} className=\"space-y-4\">
-                      <div className=\"grid md:grid-cols-2 gap-4\">
+                    <form onSubmit={handleCreateSchedule} className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                          <Label className=\"text-gray-200\">Data</Label>
-                          <Input name=\"date\" type=\"date\" required className=\"bg-white/5 border-white/20 text-white\" />
+                          <Label className="text-gray-200">Data</Label>
+                          <Input name="date" type="date" required className="bg-white/5 border-white/20 text-white" />
                         </div>
                         <div>
-                          <Label className=\"text-gray-200\">Ora</Label>
-                          <Input name=\"time\" type=\"time\" required className=\"bg-white/5 border-white/20 text-white\" />
+                          <Label className="text-gray-200">Ora</Label>
+                          <Input name="time" type="time" required className="bg-white/5 border-white/20 text-white" />
                         </div>
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Titlu</Label>
-                        <Input name=\"title\" required className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Titlu</Label>
+                        <Input name="title" required className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Descriere</Label>
-                        <Textarea name=\"description\" className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Descriere</Label>
+                        <Textarea name="description" className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Ordinea afișării</Label>
-                        <Input name=\"display_order\" type=\"number\" defaultValue={0} className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Ordinea afișării</Label>
+                        <Input name="display_order" type="number" defaultValue={0} className="bg-white/5 border-white/20 text-white" />
                       </div>
-                      <Button type=\"submit\" className=\"bg-gradient-to-r from-cyan-500 to-blue-500\">
-                        <Plus className=\"w-4 h-4 mr-2\" />
+                      <Button type="submit" className="bg-gradient-to-r from-cyan-500 to-blue-500">
+                        <Plus className="w-4 h-4 mr-2" />
                         Adaugă Eveniment
                       </Button>
                     </form>
                   </CardContent>
                 </Card>
 
-                <Card className=\"bg-white/5 border-white/10\">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Evenimente Programate</CardTitle>
+                    <CardTitle className="text-white">Evenimente Programate</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className=\"space-y-2\">
+                    <div className="space-y-2">
                       {eventSchedule.map((event) => (
-                        <div key={event.id} className=\"flex items-center justify-between p-3 bg-white/5 rounded-lg\">
+                        <div key={event.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                           <div>
-                            <h4 className=\"text-white font-semibold\">{event.title}</h4>
-                            <p className=\"text-sm text-gray-400\">{new Date(event.date).toLocaleDateString('ro-RO')} • {event.time}</p>
+                            <h4 className="text-white font-semibold">{event.title}</h4>
+                            <p className="text-sm text-gray-400">{new Date(event.date).toLocaleDateString('ro-RO')} • {event.time}</p>
                           </div>
-                          <Button size=\"sm\" variant=\"destructive\" onClick={() => handleDeleteSchedule(event.id)}>
-                            <Trash2 className=\"w-4 h-4\" />
+                          <Button size="sm" variant="destructive" onClick={() => handleDeleteSchedule(event.id)}>
+                            <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
                       ))}
@@ -581,58 +581,58 @@ export default function DashboardPage() {
 
             {/* Sponsors Tab */}
             {isAdmin && (
-              <TabsContent value=\"sponsors\" className=\"space-y-6\">
-                <Card className=\"bg-white/5 border-white/10\">
+              <TabsContent value="sponsors" className="space-y-6">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Adaugă Sponsor</CardTitle>
+                    <CardTitle className="text-white">Adaugă Sponsor</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <form onSubmit={handleCreateSponsor} className=\"space-y-4\">
+                    <form onSubmit={handleCreateSponsor} className="space-y-4">
                       <div>
-                        <Label className=\"text-gray-200\">Nume Sponsor</Label>
-                        <Input name=\"name\" required className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Nume Sponsor</Label>
+                        <Input name="name" required className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Website URL</Label>
-                        <Input name=\"website_url\" type=\"url\" className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Website URL</Label>
+                        <Input name="website_url" type="url" className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Logo URL</Label>
-                        <Input name=\"logo_url\" required className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Logo URL</Label>
+                        <Input name="logo_url" required className="bg-white/5 border-white/20 text-white" />
                       </div>
                       <div>
-                        <Label className=\"text-gray-200\">Ordinea afișării</Label>
-                        <Input name=\"display_order\" type=\"number\" defaultValue={0} className=\"bg-white/5 border-white/20 text-white\" />
+                        <Label className="text-gray-200">Ordinea afișării</Label>
+                        <Input name="display_order" type="number" defaultValue={0} className="bg-white/5 border-white/20 text-white" />
                       </div>
-                      <Button type=\"submit\" className=\"bg-gradient-to-r from-pink-500 to-orange-500\">
-                        <Plus className=\"w-4 h-4 mr-2\" />
+                      <Button type="submit" className="bg-gradient-to-r from-pink-500 to-orange-500">
+                        <Plus className="w-4 h-4 mr-2" />
                         Adaugă Sponsor
                       </Button>
                     </form>
                   </CardContent>
                 </Card>
 
-                <Card className=\"bg-white/5 border-white/10\">
+                <Card className="bg-white/5 border-white/10">
                   <CardHeader>
-                    <CardTitle className=\"text-white\">Sponsori Actuali</CardTitle>
+                    <CardTitle className="text-white">Sponsori Actuali</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className=\"grid md:grid-cols-3 gap-4\">
+                    <div className="grid md:grid-cols-3 gap-4">
                       {sponsors.map((sponsor) => (
-                        <Card key={sponsor.id} className=\"bg-white/5 border-white/10\">
-                          <CardContent className=\"p-4\">
-                            <div className=\"text-center\">
+                        <Card key={sponsor.id} className="bg-white/5 border-white/10">
+                          <CardContent className="p-4">
+                            <div className="text-center">
                               {sponsor.logo_url && (
-                                <img src={sponsor.logo_url} alt={sponsor.name} className=\"h-16 object-contain mx-auto mb-3\" />
+                                <img src={sponsor.logo_url} alt={sponsor.name} className="h-16 object-contain mx-auto mb-3" />
                               )}
-                              <h4 className=\"text-white font-semibold\">{sponsor.name}</h4>
+                              <h4 className="text-white font-semibold">{sponsor.name}</h4>
                               {sponsor.website_url && (
-                                <a href={sponsor.website_url} target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-xs text-cyan-400 hover:underline\">
+                                <a href={sponsor.website_url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:underline">
                                   {sponsor.website_url}
                                 </a>
                               )}
-                              <Button size=\"sm\" variant=\"destructive\" onClick={() => handleDeleteSponsor(sponsor.id)} className=\"mt-3 w-full\">
-                                <Trash2 className=\"w-4 h-4 mr-1\" />
+                              <Button size="sm" variant="destructive" onClick={() => handleDeleteSponsor(sponsor.id)} className="mt-3 w-full">
+                                <Trash2 className="w-4 h-4 mr-1" />
                                 Șterge
                               </Button>
                             </div>
@@ -646,14 +646,14 @@ export default function DashboardPage() {
             )}
 
             {/* Tickets Tab */}
-            <TabsContent value=\"tickets\">
-              <div className=\"grid md:grid-cols-3 gap-6\">
-                <div className=\"md:col-span-1 space-y-3\">
-                  <Card className=\"bg-white/5 border-white/10\">
+            <TabsContent value="tickets">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-1 space-y-3">
+                  <Card className="bg-white/5 border-white/10">
                     <CardHeader>
-                      <CardTitle className=\"text-white text-sm\">Toate Ticket-urile</CardTitle>
+                      <CardTitle className="text-white text-sm">Toate Ticket-urile</CardTitle>
                     </CardHeader>
-                    <CardContent className=\"space-y-2 max-h-[600px] overflow-y-auto\">
+                    <CardContent className="space-y-2 max-h-[600px] overflow-y-auto">
                       {tickets.map((ticket) => (
                         <Card
                           key={ticket.id}
@@ -665,10 +665,10 @@ export default function DashboardPage() {
                             selectedTicket?.id === ticket.id ? 'border-cyan-400' : ''
                           }`}
                         >
-                          <CardContent className=\"p-3\">
-                            <h4 className=\"text-sm font-semibold text-white line-clamp-1\">{ticket.subject}</h4>
-                            <p className=\"text-xs text-gray-400 mt-1\">De la: {ticket.profiles?.full_name || 'User'}</p>
-                            <Badge variant=\"outline\" className=\"mt-2 text-xs\" className={
+                          <CardContent className="p-3">
+                            <h4 className="text-sm font-semibold text-white line-clamp-1">{ticket.subject}</h4>
+                            <p className="text-xs text-gray-400 mt-1">De la: {ticket.profiles?.full_name || 'User'}</p>
+                            <Badge variant="outline" className="mt-2 text-xs" className={
                               ticket.status === 'open' ? 'border-blue-400 text-blue-400' :
                               ticket.status === 'in_progress' ? 'border-yellow-400 text-yellow-400' :
                               'border-green-400 text-green-400'
@@ -682,17 +682,17 @@ export default function DashboardPage() {
                   </Card>
                 </div>
 
-                <div className=\"md:col-span-2\">
+                <div className="md:col-span-2">
                   {selectedTicket ? (
-                    <Card className=\"bg-white/5 border-white/10 h-[600px] flex flex-col\">
-                      <CardHeader className=\"border-b border-white/10\">
-                        <CardTitle className=\"text-white\">{selectedTicket.subject}</CardTitle>
-                        <CardDescription className=\"text-gray-400\">
+                    <Card className="bg-white/5 border-white/10 h-[600px] flex flex-col">
+                      <CardHeader className="border-b border-white/10">
+                        <CardTitle className="text-white">{selectedTicket.subject}</CardTitle>
+                        <CardDescription className="text-gray-400">
                           De la: {selectedTicket.profiles?.email}
                         </CardDescription>
                       </CardHeader>
-                      <ScrollArea className=\"flex-1 p-4\">
-                        <div className=\"space-y-4\">
+                      <ScrollArea className="flex-1 p-4">
+                        <div className="space-y-4">
                           {ticketMessages.map((msg) => {
                             const isAdmin = msg.profiles?.role === 'admin' || msg.profiles?.role === 'organizer'
                             return (
@@ -702,11 +702,11 @@ export default function DashboardPage() {
                                     ? 'bg-gradient-to-br from-pink-500/20 to-orange-500/20 border-pink-400/30' 
                                     : 'bg-white/5 border-white/10'
                                 } border rounded-lg p-3`}>
-                                  <p className=\"text-xs font-semibold text-white mb-1\">
+                                  <p className="text-xs font-semibold text-white mb-1">
                                     {msg.profiles?.full_name || 'User'}
                                   </p>
-                                  <p className=\"text-sm text-gray-200 whitespace-pre-wrap\">{msg.message}</p>
-                                  <p className=\"text-xs text-gray-400 mt-1\">
+                                  <p className="text-sm text-gray-200 whitespace-pre-wrap">{msg.message}</p>
+                                  <p className="text-xs text-gray-400 mt-1">
                                     {new Date(msg.created_at).toLocaleString('ro-RO')}
                                   </p>
                                 </div>
@@ -715,26 +715,26 @@ export default function DashboardPage() {
                           })}
                         </div>
                       </ScrollArea>
-                      <form onSubmit={handleTicketReply} className=\"p-4 border-t border-white/10\">
-                        <div className=\"flex gap-2\">
+                      <form onSubmit={handleTicketReply} className="p-4 border-t border-white/10">
+                        <div className="flex gap-2">
                           <Textarea
-                            placeholder=\"Scrie un răspuns...\"
+                            placeholder="Scrie un răspuns..."
                             value={replyMessage}
                             onChange={(e) => setReplyMessage(e.target.value)}
                             rows={2}
-                            className=\"bg-white/5 border-white/20 text-white flex-1\"
+                            className="bg-white/5 border-white/20 text-white flex-1"
                           />
-                          <Button type=\"submit\" size=\"icon\" className=\"bg-gradient-to-r from-cyan-500 to-blue-500\">
-                            <Send className=\"w-4 h-4\" />
+                          <Button type="submit" size="icon" className="bg-gradient-to-r from-cyan-500 to-blue-500">
+                            <Send className="w-4 h-4" />
                           </Button>
                         </div>
                       </form>
                     </Card>
                   ) : (
-                    <Card className=\"bg-white/5 border-white/10 h-[600px] flex items-center justify-center\">
-                      <div className=\"text-center\">
-                        <MessageSquare className=\"w-16 h-16 text-gray-400 mx-auto mb-4\" />
-                        <p className=\"text-gray-400\">Selectează un ticket pentru a vedea conversația</p>
+                    <Card className="bg-white/5 border-white/10 h-[600px] flex items-center justify-center">
+                      <div className="text-center">
+                        <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-400">Selectează un ticket pentru a vedea conversația</p>
                       </div>
                     </Card>
                   )}

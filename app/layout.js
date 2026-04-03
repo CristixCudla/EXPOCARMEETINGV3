@@ -1,6 +1,7 @@
 import { Barlow_Condensed, Inter, Orbitron } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import Navbar from '@/components/Navbar'
 
 // Font configurations
 const barlowCondensed = Barlow_Condensed({
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
       className={`${barlowCondensed.variable} ${inter.variable} ${orbitron.variable} dark`}
     >
       <body className="font-sans antialiased relative z-10">
+        <Navbar />
         {children}
         <Toaster richColors position="top-right" />
       </body>
