@@ -1,10 +1,10 @@
 /* EXPO CAR MEETING — NEON DESIGN SYSTEM */
 @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Audiowide&family=Black+Ops+One&family=Bungee&family=Orbitron:wght@400;500;600;700;800;900&family=Nosifer&display=swap');
 
-/* Font Cyberpunk Custom */
+/* Font CyberwayRiders Custom */
 @font-face {
-  font-family: 'Cyberpunk';
-  src: url('/fonts/Cyberpunk.ttf') format('truetype');
+  font-family: 'CyberwayRiders';
+  src: url('/fonts/CyberwayRiders.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -277,7 +277,7 @@ html {
 }
 
 .font-logo-cyberpunk {
-  font-family: 'Cyberpunk', 'Nosifer', var(--font-logo), 'Black Ops One', cursive !important;
+  font-family: 'CyberwayRiders', 'Nosifer', var(--font-logo), 'Black Ops One', cursive !important;
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
