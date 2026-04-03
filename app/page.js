@@ -22,6 +22,10 @@ export default function HomePage() {
     totalCars: 0,
     acceptedCars: 0
   })
+  const [votingSession, setVotingSession] = useState(null)
+  const [timeRemaining, setTimeRemaining] = useState(null)
+  const [carVotes, setCarVotes] = useState({})
+  const [winner, setWinner] = useState(null)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,6 +51,28 @@ export default function HomePage() {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  // Timer effect
+  useEffect(() => {
+    if (!votingSession || !votingSession.is_active) return
+
+    const interval = setInterval(() => {
+      const startTime = new Date(votingSession.started_at).getTime()
+      const duration = votingSession.duration_minutes * 60 * 1000
+      const now = Date.now()
+      const remaining = startTime + duration - now
+
+      if (remaining <= 0) {
+        setTimeRemaining(0)
+        calculateWinner()
+        clearInterval(interval)
+      } else {
+        setTimeRemaining(Math.floor(remaining / 1000))
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [votingSession, bestCars])
 
   async function loadUserProfile(userId) {
     try {
@@ -112,6 +138,12 @@ export default function HomePage() {
       if (carsError) throw carsError
       setBestCars(bestCarsData || [])
 
+      // Load voting session
+      await loadVotingSession()
+
+      // Load vote counts
+      await loadVoteCounts()
+
       // Load sponsors
       const { data: sponsorsData, error: sponsorsError } = await supabase
         .from('sponsors')
@@ -127,6 +159,81 @@ export default function HomePage() {
     }
   }
 
+  async function loadVotingSession() {
+    try {
+      const { data, error } = await supabase
+        .from('voting_sessions')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      
+      if (error && error.code !== 'PGRST116') throw error
+      setVotingSession(data)
+
+      // If session exists, check if time expired
+      if (data) {
+        const startTime = new Date(data.started_at).getTime()
+        const duration = data.duration_minutes * 60 * 1000
+        const now = Date.now()
+        const remaining = startTime + duration - now
+
+        if (remaining <= 0) {
+          // Voting ended
+          setTimeRemaining(0)
+          calculateWinner()
+        } else {
+          setTimeRemaining(Math.floor(remaining / 1000))
+        }
+      }
+    } catch (error) {
+      console.error('Error loading voting session:', error)
+    }
+  }
+
+  async function loadVoteCounts() {
+    try {
+      const { data, error } = await supabase
+        .from('votes')
+        .select('car_id')
+      
+      if (error) throw error
+
+      const counts = {}
+      data.forEach(vote => {
+        counts[vote.car_id] = (counts[vote.car_id] || 0) + 1
+      })
+      setCarVotes(counts)
+    } catch (error) {
+      console.error('Error loading vote counts:', error)
+    }
+  }
+
+  function calculateWinner() {
+    if (bestCars.length === 0) return
+
+    let maxVotes = 0
+    let winningCar = null
+
+    bestCars.forEach(car => {
+      const votes = carVotes[car.id] || 0
+      if (votes > maxVotes) {
+        maxVotes = votes
+        winningCar = car
+      }
+    })
+
+    setWinner(winningCar)
+  }
+
+  function formatTime(seconds) {
+    if (seconds === null) return ''
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   async function handleVote(carId) {
     if (!user) {
       toast.error('Trebuie să fii autentificat pentru a vota')
@@ -135,6 +242,12 @@ export default function HomePage() {
 
     if (userVote) {
       toast.error('Ai votat deja!')
+      return
+    }
+
+    // Check if voting is still active
+    if (votingSession && timeRemaining !== null && timeRemaining <= 0) {
+      toast.error('Votarea s-a încheiat!')
       return
     }
 
@@ -147,6 +260,9 @@ export default function HomePage() {
 
       setUserVote({ car_id: carId })
       toast.success('Votul tău a fost înregistrat!')
+      
+      // Reload vote counts
+      await loadVoteCounts()
     } catch (error) {
       console.error('Error voting:', error)
       toast.error('Eroare la votare')
@@ -198,7 +314,7 @@ export default function HomePage() {
       {bestCars.length > 0 && (
         <section className="py-20 px-5 md:px-10 relative z-10">
           <div className="max-w-7xl mx-auto">
-            {/* Header */}
+            {/* Header cu Timer */}
             <div className="text-center mb-16">
               <div className="inline-block mb-6">
                 <Badge className="bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-600 text-black border-0 px-6 py-3 text-lg font-black uppercase tracking-wider">
@@ -206,6 +322,32 @@ export default function HomePage() {
                   Nominalizați
                 </Badge>
               </div>
+              
+              {/* Timer Countdown */}
+              {votingSession && timeRemaining !== null && timeRemaining > 0 && (
+                <div className="mb-6">
+                  <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0 px-8 py-4 text-2xl font-black">
+                    <Clock className="w-6 h-6 mr-3 inline animate-pulse" />
+                    TIMP RĂMAS: {formatTime(timeRemaining)}
+                  </Badge>
+                  <p className="text-gray-400 text-sm mt-3">
+                    Votarea se încheie automat după expirarea timpului
+                  </p>
+                </div>
+              )}
+
+              {/* Winner Announcement */}
+              {votingSession && timeRemaining === 0 && winner && (
+                <div className="mb-6 animate-pulse">
+                  <Badge className="bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 text-black border-0 px-8 py-4 text-3xl font-black">
+                    ⭐ AVEM UN CÂȘTIGĂTOR! ⭐
+                  </Badge>
+                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 text-2xl font-bold mt-4">
+                    {winner.make} {winner.model} a câștigat cu {carVotes[winner.id] || 0} voturi!
+                  </p>
+                </div>
+              )}
+              
               <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 mb-6">
                 BEST CAR
               </h2>
@@ -219,95 +361,119 @@ export default function HomePage() {
 
             {/* Grid Mașini Nominalizate */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {bestCars.map((car) => (
-                <Card 
-                  key={car.id} 
-                  className="relative overflow-hidden group cursor-pointer"
-                  onClick={() => {
-                    // Scroll to voting section or open modal
-                    const votingSection = document.getElementById('best-cars');
-                    if (votingSection) {
-                      votingSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  {/* Golden Glow Background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/30 via-orange-500/30 to-yellow-600/30 backdrop-blur-sm"></div>
-                  
-                  {/* Golden Border Animation */}
-                  <div className="absolute inset-0 border-4 border-transparent bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute inset-[4px] bg-black"></div>
+              {bestCars.map((car) => {
+                const voteCount = carVotes[car.id] || 0
+                const isWinner = winner && winner.id === car.id
+                const showVotes = (userProfile?.role === 'admin' || userProfile?.role === 'organizer') || (votingSession && timeRemaining === 0)
+                const votingActive = votingSession && timeRemaining !== null && timeRemaining > 0
 
-                  {/* Content */}
-                  <div className="relative z-10">
-                    {/* Car Image */}
-                    {car.images && car.images[0] ? (
-                      <div className="aspect-video relative overflow-hidden">
-                        <img 
-                          src={car.images[0]} 
-                          alt={`${car.make} ${car.model}`}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        {/* Golden Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent"></div>
-                        
-                        {/* Trophy Badge */}
-                        <div className="absolute top-3 right-3">
-                          <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black border-0 font-black">
-                            <Trophy className="w-4 h-4 mr-1" />
-                            NOMINEE
-                          </Badge>
+                return (
+                  <Card 
+                    key={car.id} 
+                    className={`relative overflow-hidden group cursor-pointer ${isWinner ? 'ring-4 ring-yellow-400 animate-pulse' : ''}`}
+                  >
+                    {/* Golden Glow Background */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${isWinner ? 'from-yellow-400/50 via-orange-500/50 to-yellow-600/50' : 'from-yellow-500/30 via-orange-500/30 to-yellow-600/30'} backdrop-blur-sm`}></div>
+                    
+                    {/* Golden Border Animation */}
+                    <div className="absolute inset-0 border-4 border-transparent bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute inset-[4px] bg-black"></div>
+
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Car Image */}
+                      {car.images && car.images[0] ? (
+                        <div className="aspect-video relative overflow-hidden">
+                          <img 
+                            src={car.images[0]} 
+                            alt={`${car.make} ${car.model}`}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          {/* Golden Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent"></div>
+                          
+                          {/* Winner or Nominee Badge */}
+                          <div className="absolute top-3 right-3">
+                            {isWinner ? (
+                              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-black border-0 font-black text-lg px-4 py-2 animate-pulse">
+                                ⭐ CÂȘTIGĂTOR ⭐
+                              </Badge>
+                            ) : (
+                              <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black border-0 font-black">
+                                <Trophy className="w-4 h-4 mr-1" />
+                                NOMINEE
+                              </Badge>
+                            )}
+                          </div>
+
+                          {/* Vote Count - Show only for admin/organizer or after voting ends */}
+                          {showVotes && (
+                            <div className="absolute bottom-3 left-3">
+                              <Badge className="bg-black/80 text-yellow-400 border-yellow-400 font-black text-lg px-4 py-2">
+                                <Trophy className="w-4 h-4 mr-2 inline" />
+                                {voteCount} {voteCount === 1 ? 'VOT' : 'VOTURI'}
+                              </Badge>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ) : (
-                      <div className="aspect-video bg-gradient-to-br from-yellow-900/50 to-orange-900/50 flex items-center justify-center">
-                        <Trophy className="w-24 h-24 text-yellow-500/50" />
-                      </div>
-                    )}
-
-                    <CardContent className="p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10">
-                      <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
-                        {car.make} {car.model}
-                      </h3>
-                      {car.year && (
-                        <Badge variant="outline" className="border-yellow-500 text-yellow-500 mb-3">
-                          {car.year}
-                        </Badge>
+                      ) : (
+                        <div className="aspect-video bg-gradient-to-br from-yellow-900/50 to-orange-900/50 flex items-center justify-center">
+                          <Trophy className="w-24 h-24 text-yellow-500/50" />
+                        </div>
                       )}
-                      <p className="text-gray-300 text-sm line-clamp-2 mb-4">
-                        {car.description || 'Nominalizat pentru Best Car of the Show'}
-                      </p>
-                      
-                      {/* Voting Info */}
-                      <div className="flex items-center justify-between">
-                        {user && !userVote ? (
-                          <Button 
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleVote(car.id)
-                            }}
-                            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-black"
-                            size="sm"
-                          >
-                            <Trophy className="w-4 h-4 mr-2" />
-                            VOTEAZĂ
-                          </Button>
-                        ) : userVote?.car_id === car.id ? (
-                          <Badge className="w-full justify-center bg-green-500/20 text-green-400 border-green-400 font-bold">
-                            ✓ Votat
+
+                      <CardContent className="p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10">
+                        <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
+                          {car.make} {car.model}
+                        </h3>
+                        {car.year && (
+                          <Badge variant="outline" className="border-yellow-500 text-yellow-500 mb-3">
+                            {car.year}
                           </Badge>
-                        ) : !user ? (
-                          <Link href="/auth/login" className="w-full">
-                            <Button variant="outline" size="sm" className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10">
-                              Conectează-te pentru a vota
+                        )}
+                        <p className="text-gray-300 text-sm line-clamp-2 mb-4">
+                          {car.description || 'Nominalizat pentru Best Car of the Show'}
+                        </p>
+                        
+                        {/* Voting Info */}
+                        <div className="flex items-center justify-between">
+                          {isWinner ? (
+                            <Badge className="w-full justify-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-black py-3 text-lg">
+                              🏆 A CÂȘTIGAT! 🏆
+                            </Badge>
+                          ) : votingActive && user && !userVote ? (
+                            <Button 
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleVote(car.id)
+                              }}
+                              className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-black"
+                              size="sm"
+                            >
+                              <Trophy className="w-4 h-4 mr-2" />
+                              VOTEAZĂ
                             </Button>
-                          </Link>
-                        ) : null}
-                      </div>
-                    </CardContent>
-                  </div>
-                </Card>
-              ))}
+                          ) : userVote?.car_id === car.id ? (
+                            <Badge className="w-full justify-center bg-green-500/20 text-green-400 border-green-400 font-bold">
+                              ✓ Votat
+                            </Badge>
+                          ) : !votingActive && !isWinner ? (
+                            <Badge className="w-full justify-center bg-gray-500/20 text-gray-400 border-gray-400">
+                              Votarea s-a încheiat
+                            </Badge>
+                          ) : !user ? (
+                            <Link href="/auth/login" className="w-full">
+                              <Button variant="outline" size="sm" className="w-full border-yellow-500 text-yellow-500 hover:bg-yellow-500/10">
+                                Conectează-te pentru a vota
+                              </Button>
+                            </Link>
+                          ) : null}
+                        </div>
+                      </CardContent>
+                    </div>
+                  </Card>
+                )
+              })}
             </div>
 
             {/* CTA Bottom */}
