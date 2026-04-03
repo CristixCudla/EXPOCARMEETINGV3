@@ -18,10 +18,10 @@
    │  VARIABILE DE DESIGN (LIGHT MODE)                                      │
    ╰─────────────────────────────────────────────────────────────────────────╯ */
 :root {
-  /* Fonturi Cyberpunk/Agresive */
-  --font-logo: 'Black Ops One', 'Bungee', 'Orbitron', cursive;
-  --font-heading: 'Teko', 'Barlow Condensed', sans-serif;
-  --font-body: 'Rajdhani', 'Inter', sans-serif;
+  /* Fonturi Cyberpunk/Agresive - Actualizate pentru consistență */
+  --font-logo: 'CyberwayRiders', 'Black Ops One', 'Bungee', 'Orbitron', cursive;
+  --font-heading: 'Orbitron', 'Audiowide', 'Teko', sans-serif;
+  --font-body: 'Rajdhani', 'Orbitron', sans-serif;
 
   /* Neon palette */
   --neon-pink: #ec4899;
@@ -134,6 +134,7 @@ body {
   color: #ffffff;
   font-size: 16px;
   position: relative;
+  font-family: var(--font-body), 'Rajdhani', 'Orbitron', sans-serif;
 }
 
 body::before {
@@ -285,26 +286,26 @@ html {
 }
 
 .section-label {
-  font-family: var(--font-body), 'Rajdhani', sans-serif;
+  font-family: var(--font-body), 'Rajdhani', 'Orbitron', sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #06b6d4;
 }
 
 .display-heading {
-  font-family: var(--font-heading), 'Teko', sans-serif !important;
+  font-family: var(--font-heading), 'Orbitron', 'Audiowide', sans-serif !important;
   font-weight: 700;
   font-size: clamp(2.5rem, 7vw, 8rem);
   line-height: 0.9;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
 }
 
 .italic-subtitle {
-  font-family: var(--font-heading), 'Teko', sans-serif !important;
+  font-family: var(--font-heading), 'Orbitron', 'Audiowide', sans-serif !important;
   font-weight: 600;
   font-style: normal;
   background: linear-gradient(90deg, #ec4899, #a855f7, #06b6d4);
@@ -312,7 +313,7 @@ html {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 0.92;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.05em;
 }
 
 .stat-number {
