@@ -29,8 +29,25 @@ export default function LoginPage() {
 
       if (error) throw error
 
+      // Get user profile to check role
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single()
+
+      if (profileError) {
+        console.error('Profile error:', profileError)
+      }
+
       toast.success('Autentificare reușită! 🎉')
-      router.push('/')
+
+      // Redirect based on role
+      if (profile?.role === 'admin' || profile?.role === 'organizer') {
+        router.push('/dashboard')
+      } else {
+        router.push('/')
+      }
     } catch (error) {
       console.error('Login error:', error)
       toast.error(error.message || 'Eroare la autentificare')

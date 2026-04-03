@@ -104,7 +104,7 @@ export default function Navbar() {
                   </DropdownMenuItem>
                   
                   <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10">
-                    <Link href="/#best-cars" className="flex items-center gap-2">
+                    <Link href="/masini" className="flex items-center gap-2">
                       <Trophy className="w-4 h-4 text-yellow-400" />
                       <span>Vezi Mașinile</span>
                     </Link>
