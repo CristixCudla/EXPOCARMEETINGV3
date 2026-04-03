@@ -474,51 +474,101 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Secțiune Partener Oficial - AUTO MINGIUC */}
+      <section className="py-20 px-5 md:px-10 relative z-10 border-b border-white/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="section-label mb-4 text-cyan-400 uppercase tracking-widest">Partener Oficial</p>
+          </div>
+
+          <div className="flex flex-col items-center">
+            <a 
+              href="https://tractarifalticeni.ro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <div className="relative w-64 h-64 mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-full blur-3xl"></div>
+                <img 
+                  src="https://expocarmeeting.ro/images/auto-mingiuc-official.png"
+                  alt="Auto Mingiuc"
+                  className="relative w-full h-full object-contain"
+                />
+              </div>
+              <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider text-center group-hover:text-orange-400 transition-colors">
+                AUTO MINGIUC
+              </h3>
+            </a>
+            <p className="text-gray-400 text-center mt-4">
+              Partener oficial al Expo Car Meeting 2026
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Secțiune Sponsori */}
       {sponsors.length > 0 && (
         <section className="py-20 px-5 md:px-10 relative z-10">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
-              <p className="section-label mb-4 text-cyan-400 uppercase tracking-widest">Partener Oficial</p>
+              <h2 className="text-5xl md:text-7xl font-black text-white mb-4">
+                SPONSORII
+              </h2>
+              <p className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-6">
+                Noștri
+              </p>
             </div>
 
-            <div className="flex flex-wrap justify-center items-center gap-12">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {sponsors.map((sponsor) => (
-                <div key={sponsor.id} className="text-center space-y-4">
-                  {sponsor.logo_url && (
-                    <div className="relative w-64 h-64 mx-auto mb-6">
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-full blur-3xl"></div>
-                      <img 
-                        src={sponsor.logo_url}
-                        alt={sponsor.name}
-                        className="relative w-full h-full object-contain"
-                      />
-                    </div>
-                  )}
-                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider">
-                    {sponsor.name}
-                  </h3>
-                  <p className="text-gray-400">
-                    Partener oficial al Expo Car Meeting 2026
-                  </p>
-                  {sponsor.website_url && (
-                    <a 
-                      href={sponsor.website_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block"
-                    >
-                      <Button variant="outline" className="border-orange-400 text-orange-400 hover:bg-orange-400/10 mt-4">
-                        Vizitează Website
-                      </Button>
-                    </a>
-                  )}
-                </div>
+                <a
+                  key={sponsor.id}
+                  href={sponsor.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <Card className="bg-gradient-to-br from-white/10 to-white/5 border-white/20 backdrop-blur-xl p-6 hover:scale-105 transition-all duration-300 hover:border-cyan-400/50">
+                    {sponsor.logo_url && (
+                      <div className="relative w-full aspect-square mb-4">
+                        <img 
+                          src={sponsor.logo_url}
+                          alt={sponsor.name}
+                          className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold text-white text-center group-hover:text-cyan-400 transition-colors">
+                      {sponsor.name}
+                    </h3>
+                  </Card>
+                </a>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      {/* Secțiune Devii Sponsor */}
+      <section className="py-20 px-5 md:px-10 relative z-10 border-t border-white/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-12">
+            <h3 className="text-4xl md:text-5xl font-black text-white mb-6">
+              Vrei să devii <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">SPONSOR?</span>
+            </h3>
+            <p className="text-gray-300 text-lg mb-8">
+              Alătură-te evenimentului și crește vizibilitatea brandului tău în comunitatea auto!
+            </p>
+            <Link href="/devii-sponsor">
+              <Button size="lg" className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold px-8 py-6 text-lg">
+                CONTACTEAZĂ-NE
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="py-12 px-5 md:px-10 border-t border-white/10 relative z-10">
