@@ -1,0 +1,118 @@
+<!-- ============================================ -->
+<!-- EMAIL TEMPLATE #3: MAGIC LINK (LOGIN DIRECT) -->
+<!-- ============================================ -->
+<!-- Folosit în Supabase pentru: Magic Link -->
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Link - Login Direct</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #000000;">
+    <table role="presentation" style="width: 100%; background-color: #000000;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; width: 100%; background: linear-gradient(135deg, #1a0033 0%, #0a0015 100%); border: 2px solid #a855f7; border-radius: 16px; box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);">
+                    
+                    <!-- Header cu Logo -->
+                    <tr>
+                        <td align="center" style="padding: 40px 30px 20px 30px;">
+                            <h1 style="margin: 0; color: #06b6d4; font-size: 42px; font-weight: 900; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 20px rgba(6, 182, 212, 0.8);">
+                                EXPO CAR MEETING
+                            </h1>
+                            <p style="margin: 10px 0 0 0; color: #a855f7; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">
+                                Fălticeni • Nada Florilor • 2026
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Linie Separator Neon -->
+                    <tr>
+                        <td style="padding: 0 30px;">
+                            <div style="height: 2px; background: linear-gradient(90deg, transparent, #a855f7, transparent);"></div>
+                        </td>
+                    </tr>
+
+                    <!-- Conținut Principal -->
+                    <tr>
+                        <td style="padding: 30px;">
+                            <h2 style="margin: 0 0 20px 0; color: #ffffff; font-size: 28px; font-weight: bold; text-align: center;">
+                                ⚡ Conectare Rapidă
+                            </h2>
+                            
+                            <p style="margin: 0 0 20px 0; color: #e5e7eb; font-size: 16px; line-height: 1.6; text-align: center;">
+                                Cineva a cerut un <strong style="color: #a855f7;">link de conectare rapidă</strong> pentru contul tău <strong style="color: #06b6d4;">EXPO CAR MEETING</strong>.
+                            </p>
+
+                            <p style="margin: 0 0 30px 0; color: #e5e7eb; font-size: 16px; line-height: 1.6; text-align: center;">
+                                Apasă butonul de mai jos pentru a te conecta instant, <strong>fără parolă</strong>:
+                            </p>
+
+                            <!-- Buton CTA -->
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td align="center" style="padding: 20px 0;">
+                                        <a href="{{ .ConfirmationURL }}" 
+                                           style="display: inline-block; padding: 18px 40px; background: linear-gradient(90deg, #a855f7, #ec4899); color: #ffffff; text-decoration: none; font-weight: bold; font-size: 18px; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); transition: all 0.3s;">
+                                            ⚡ CONECTARE INSTANT
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Link Alternativ -->
+                            <p style="margin: 30px 0 0 0; color: #9ca3af; font-size: 13px; line-height: 1.6; text-align: center;">
+                                Dacă butonul nu funcționează, copiază și lipește acest link în browser:<br>
+                                <a href="{{ .ConfirmationURL }}" style="color: #a855f7; word-break: break-all;">{{ .ConfirmationURL }}</a>
+                            </p>
+
+                            <!-- Info Box -->
+                            <div style="margin-top: 30px; padding: 15px; background-color: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; border-radius: 4px;">
+                                <p style="margin: 0 0 10px 0; color: #c084fc; font-size: 14px; font-weight: bold;">
+                                    ℹ️ Ce este Magic Link?
+                                </p>
+                                <p style="margin: 0; color: #e9d5ff; font-size: 13px; line-height: 1.5;">
+                                    Magic Link te permite să te conectezi <strong>fără să introduci parola</strong>. Apasă pe link și ești automat autentificat! Simplu și rapid. ⚡
+                                </p>
+                            </div>
+
+                            <!-- Security Warning -->
+                            <div style="margin-top: 20px; padding: 15px; background-color: rgba(251, 191, 36, 0.1); border-left: 4px solid #fbbf24; border-radius: 4px;">
+                                <p style="margin: 0 0 5px 0; color: #fbbf24; font-size: 14px; font-weight: bold;">
+                                    ⚠️ Securitate
+                                </p>
+                                <ul style="margin: 0; padding-left: 20px; color: #fde68a; font-size: 13px; line-height: 1.5;">
+                                    <li>Link-ul este valabil <strong>1 oră</strong></li>
+                                    <li>Funcționează doar pe dispozitivul care a făcut cererea</li>
+                                    <li>Dacă nu tu ai cerut acest link, <strong>ignoră emailul</strong></li>
+                                </ul>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px; text-align: center; border-top: 1px solid rgba(168, 85, 247, 0.3);">
+                            <p style="margin: 0 0 10px 0; color: #9ca3af; font-size: 14px;">
+                                Pasiune & Performanță se întâlnesc<br>
+                                6-7 Iunie 2026 • Stadionul Nada Florilor, Fălticeni
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 12px;">
+                                © 2026 EXPO CAR MEETING. Toate drepturile rezervate.
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 11px;">
+                                Dacă nu ai cerut acest link de conectare, ignoră acest email.<br>
+                                Contul tău rămâne în siguranță.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
