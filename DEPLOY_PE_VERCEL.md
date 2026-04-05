@@ -1,10 +1,11 @@
 # 🚀 GHID COMPLET: DEPLOY EXPO CAR MEETING PE VERCEL
 
 ## ✅ PREGĂTIREA (FĂCUT DEJA)
-- ✅ next.config.js simplificat pentru Vercel
+- ✅ next.config.js optimizat pentru Vercel
 - ✅ vercel.json creat
-- ✅ Logo-ul folosește Supabase Storage URL
-- ✅ Fonturile folosesc Google Fonts
+- ✅ Logo Auto Mingiuc folosește Supabase Storage URL
+- ✅ **Fonturile custom RESTAURATE** (Supercharge, CyberwayRiders) - vor funcționa în Vercel!
+- ✅ Folderul /public va fi copiat automat de Vercel
 
 ---
 

@@ -1,0 +1,8 @@
+# Vercel va ignora acest fișier, dar va INCLUDE tot din /public automat
+# Acest fișier forțează Vercel să respecte structura /public
+
+# IMPORTANT: Acest folder conține assets critice pentru aplicație:
+# - /fonts/*.ttf, *.otf - Fonturi custom (Supercharge, CyberwayRiders)
+# - /*.png - Logo-uri și imagini statice
+
+# Vercel procesează automat /public în build, NU trebuie copiere manuală!
