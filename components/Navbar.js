@@ -72,17 +72,14 @@ export default function Navbar() {
       <div className="px-4 md:px-5 lg:px-10 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-logo-cyberpunk text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wider">
-              <span className="text-[#ec4899] logo-pulsar-color" style={{
-                textShadow: '0 0 15px rgba(236, 72, 153, 0.8), 0 0 30px rgba(236, 72, 153, 0.5)'
-              }}>EXPO</span>
-              <span className="text-white" style={{
-                textShadow: '0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.4)'
-              }}> CAR </span>
-              <span className="text-[#06b6d4]" style={{
-                textShadow: '0 0 15px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.5)'
-              }}>MEETING</span>
-            </span>
+            <Image 
+              src="/logo-dripping.png" 
+              alt="EXPO CAR MEETING" 
+              width={220} 
+              height={50}
+              className="h-8 sm:h-10 md:h-12 w-auto object-contain"
+              priority
+            />
           </Link>
           
           <div className="flex items-center gap-2 md:gap-3 relative">

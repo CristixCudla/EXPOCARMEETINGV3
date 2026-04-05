@@ -287,10 +287,10 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30"></div>
         </div>
 
-        {/* Hero Content - Aliniat stânga pe desktop, centrat pe mobile */}
-        <div className="relative z-20 w-full px-5 md:px-10 lg:px-16 pt-24 md:pt-20">
+        {/* Hero Content - Aliniat STÂNGA COMPLET pe desktop */}
+        <div className="relative z-20 w-full px-5 md:pl-10 lg:pl-16 md:pr-0 pt-24 md:pt-20">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center md:text-left max-w-3xl">
+            <div className="text-center md:text-left max-w-3xl md:max-w-2xl lg:max-w-3xl">
               <p className="section-label mb-4 md:mb-6 text-cyan-400 text-xs md:text-sm">
                 <MapPin className="inline w-3 h-3 md:w-4 md:h-4 mr-2" />FĂLTICENI • NADA FLORILOR — 2026
               </p>

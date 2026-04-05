@@ -429,15 +429,17 @@ export default function DashboardPage() {
           </Card>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white/5 border border-white/10">
-              {isAdmin && <TabsTrigger value="overview">Overview</TabsTrigger>}
-              {isAdmin && <TabsTrigger value="users">Utilizatori</TabsTrigger>}
-              {isAdmin && <TabsTrigger value="cars">Mașini</TabsTrigger>}
-              {isAdmin && <TabsTrigger value="best-car">Best Car</TabsTrigger>}
-              {isAdmin && <TabsTrigger value="schedule">Program</TabsTrigger>}
-              {isAdmin && <TabsTrigger value="sponsors">Sponsori</TabsTrigger>}
-              <TabsTrigger value="tickets">Support Tickets</TabsTrigger>
-            </TabsList>
+            <div className="w-full overflow-x-auto pb-2 -mx-2 px-2">
+              <TabsList className="bg-white/5 border border-white/10 inline-flex min-w-full md:min-w-0 flex-nowrap">
+                {isAdmin && <TabsTrigger value="overview" className="whitespace-nowrap">Overview</TabsTrigger>}
+                {isAdmin && <TabsTrigger value="users" className="whitespace-nowrap">Utilizatori</TabsTrigger>}
+                {isAdmin && <TabsTrigger value="cars" className="whitespace-nowrap">Mașini</TabsTrigger>}
+                {isAdmin && <TabsTrigger value="best-car" className="whitespace-nowrap">Best Car</TabsTrigger>}
+                {isAdmin && <TabsTrigger value="schedule" className="whitespace-nowrap">Program</TabsTrigger>}
+                {isAdmin && <TabsTrigger value="sponsors" className="whitespace-nowrap">Sponsori</TabsTrigger>}
+                <TabsTrigger value="tickets" className="whitespace-nowrap">Support Tickets</TabsTrigger>
+              </TabsList>
+            </div>
 
             {/* Overview Tab */}
             {isAdmin && (
