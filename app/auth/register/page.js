@@ -42,6 +42,7 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/login`,
           data: {
             full_name: formData.full_name
           }
@@ -50,8 +51,9 @@ export default function RegisterPage() {
 
       if (error) throw error
 
-      toast.success('Cont creat cu succes! 🎉')
-      router.push('/')
+      toast.success('Cont creat! Verifică email-ul pentru confirmare. 📧')
+      // Nu mai redirect automat, user trebuie să confirme email-ul mai întâi
+      setFormData({ email: '', password: '', confirmPassword: '', full_name: '' })
     } catch (error) {
       console.error('Register error:', error)
       toast.error(error.message || 'Eroare la înregistrare')
