@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { supabase } from '@/lib/supabase'
-import { sendEmail, emailTemplates } from '@/lib/resend'
-import { sendCarApprovedEmail, sendCarRejectedEmail } from '@/lib/resend-new'
+import { sendCarApprovalEmail, sendCarRejectionEmail } from '@/lib/gmail-smtp'
 
 // Helper to get current user
 async function getCurrentUser(request) {
@@ -176,21 +175,22 @@ export async function POST(request) {
       
       if (error) throw error
       
-      // Send email notification with new cool templates
+      // Send email notification with new Gmail templates
       if (carData && carData.profiles) {
         const userEmail = carData.profiles.email
         const userDetails = { full_name: carData.profiles.full_name }
         const carDetails = {
           make: carData.make,
           model: carData.model,
-          year: carData.year
+          year: carData.year,
+          images: carData.images || []
         }
         
         try {
           if (status === 'accepted') {
-            await sendCarApprovedEmail(userEmail, userDetails, carDetails)
+            await sendCarApprovalEmail(userEmail, userDetails, carDetails)
           } else if (status === 'rejected') {
-            await sendCarRejectedEmail(userEmail, userDetails, carDetails)
+            await sendCarRejectionEmail(userEmail, userDetails, carDetails)
           }
         } catch (emailError) {
           console.error('Email send error:', emailError)

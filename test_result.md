@@ -279,6 +279,18 @@ backend:
         agent: "testing"
         comment: "Protected endpoints correctly return 401 Unauthorized when no auth token provided"
 
+  - task: "Gmail SMTP Email Integration"
+    implemented: true
+    working: true
+    file: "/app/lib/gmail-smtp.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Gmail SMTP integration fully functional. Successfully tested car approval/rejection emails sent to cristicudla123@gmail.com from expocarmeeting@gmail.com. Backend logs confirm 'Gmail SMTP ready' and 'Car approval email sent' messages. Email templates include car images, make/model/year details, Romanian language content, and support ticket buttons. SMTP configuration: smtp.gmail.com:587 with app password authentication."
+
   - task: "Invalid Endpoint Handling"
     implemented: true
     working: true
@@ -312,8 +324,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Email Delivery Verification"
-    - "Frontend Integration Testing"
+    - "Gmail SMTP Email Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -325,3 +336,5 @@ agent_communication:
     message: "User (Romanian speaker) requested full E2E testing: 'HAI SA TESTAM APLICATIA SA Vedem daca merg mailurile ia inscrie o masina, fa cont sa fie totul okk'. Translation: 'LET'S TEST THE APPLICATION to see if emails work, register a car, create account, everything should be ok'. Testing priorities: 1) New user registration (test with testuser@expocarmeeting.ro), 2) Car registration flow with image upload, 3) Verify Resend emails are sent (sender: contact@expocarmeeting.ro). Known working: admin@expocarmeeting.ro / admin123!. Test credentials will be saved to /app/memory/test_credentials.md."
   - agent: "testing"
     message: "✅ COMPREHENSIVE E2E TESTING COMPLETED SUCCESSFULLY! All critical backend features are working perfectly. Key findings: 1) User registration works (creates user + profile), 2) Admin authentication fully functional, 3) Car registration with image validation working, 4) Car approval process working, 5) Email notifications via Resend API confirmed working, 6) Authorization protection properly implemented. The only 'issue' is that new users need email confirmation (Supabase security feature) - this is expected behavior. Test credentials saved to /app/memory/test_credentials.md. The application is ready for production use!"
+  - agent: "testing"
+    message: "🎉 GMAIL SMTP INTEGRATION TESTING COMPLETED SUCCESSFULLY! Comprehensive testing of Gmail SMTP email delivery system completed with 5/5 tests passing. Key results: 1) User login (cristicudla123@gmail.com) ✅ working, 2) Admin login ✅ working, 3) Car registration (BMW M4 Competition 2024) ✅ working, 4) Car approval email via Gmail SMTP ✅ working, 5) Car rejection email via Gmail SMTP ✅ working. Backend logs confirm 'Gmail SMTP ready' and successful email delivery to cristicudla123@gmail.com from expocarmeeting@gmail.com. Email templates include car images, Romanian language content, and all required elements. Gmail SMTP has successfully replaced Resend for email delivery."
