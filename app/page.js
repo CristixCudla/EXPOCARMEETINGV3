@@ -287,9 +287,9 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30"></div>
         </div>
 
-        {/* Hero Content - Aliniat STÂNGA COMPLET pe desktop */}
-        <div className="relative z-20 w-full px-5 md:pl-10 lg:pl-16 md:pr-0 pt-16 md:pt-16">
-          <div className="max-w-7xl mx-auto">
+        {/* Hero Content - LIPIT STÂNGA pe desktop */}
+        <div className="relative z-20 w-full px-4 md:pl-4 lg:pl-8 md:pr-0 pt-16 md:pt-16">
+          <div className="max-w-7xl">
             <div className="text-center md:text-left max-w-3xl md:max-w-2xl lg:max-w-3xl">
               <p className="section-label mb-3 md:mb-4 text-cyan-400 text-xs md:text-sm">
                 <MapPin className="inline w-3 h-3 md:w-4 md:h-4 mr-2" />FĂLTICENI • NADA FLORILOR — 2026
@@ -738,6 +738,34 @@ export default function HomePage() {
               </h3>
             </a>
             <p className="text-gray-400 text-center mt-4">
+              Partener oficial al Expo Car Meeting 2026
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Partener Oficial - Auto Mingiuc */}
+      <section className="py-16 md:py-20 px-5 md:px-10 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <p className="text-sm md:text-base uppercase tracking-widest text-cyan-400 mb-4">
+              PARTENER OFICIAL
+            </p>
+          </div>
+          
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-6 md:mb-8">
+              <img 
+                src="/auto-mingiuc-logo.png"
+                alt="Auto Mingiuc - Tractari si Asistenta Rutiera"
+                className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 md:mb-4 text-center">
+              AUTO MINGIUC
+            </h3>
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 text-center max-w-2xl">
               Partener oficial al Expo Car Meeting 2026
             </p>
           </div>
