@@ -733,7 +733,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 rounded-full border-4 border-orange-500/40 group-hover:border-orange-500/70 transition-all duration-300"></div>
                 
                 <img 
-                  src="/auto-mingiuc-logo.png"
+                  src="https://cipxfkqtwpaxvvelrljh.supabase.co/storage/v1/object/public/car-images/static/auto-mingiuc-logo.png"
                   alt="Auto Mingiuc - Tractari si Asistenta Rutiera"
                   className="relative w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 />

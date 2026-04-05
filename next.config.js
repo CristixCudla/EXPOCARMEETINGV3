@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Asigură că fișierele publice sunt copiate în build
+  distDir: '.next',
+  
   experimental: {
     // Remove if not using Server Components
     serverComponentsExternalPackages: ['mongodb'],
@@ -32,6 +35,19 @@ const nextConfig = {
           { key: "Access-Control-Allow-Origin", value: process.env.CORS_ORIGINS || "*" },
           { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
           { key: "Access-Control-Allow-Headers", value: "*" },
+        ],
+      },
+      // Serve static files from public folder
+      {
+        source: "/fonts/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*.png",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ];
