@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { supabase } from '@/lib/supabase'
-import { sendCarApprovalEmail, sendCarRejectionEmail, sendNewTicketNotification, sendTicketReplyToUser, sendTicketReplyToAdmins } from '@/lib/gmail-smtp'
+import { sendCarApprovalEmail, sendCarRejectionEmail, sendNewTicketNotification, sendTicketReplyNotification } from '@/lib/resend-emails'
 
 // Helper to get current user
 async function getCurrentUser(request) {
@@ -366,22 +366,25 @@ export async function POST(request) {
           // Admin/Organizer replied, notify user
           const userEmail = ticketData.profiles.email
           const userName = ticketData.profiles.full_name || 'Utilizator'
+          const senderName = profile.full_name || 'Administrator'
           
-          await sendTicketReplyToUser(
+          await sendTicketReplyNotification(
             userEmail,
             { subject: ticketData.subject, id: ticket_id },
-            { message, created_by_name: profile.full_name || 'Administrator' }
+            message,
+            senderName
           )
         } else {
           // User replied, notify admin
-          const adminEmails = [process.env.ADMIN_EMAIL || 'admin@expocarmeeting.ro']
+          const adminEmail = process.env.ADMIN_EMAIL || 'admin@expocarmeeting.ro'
           const userName = profile.full_name || 'Utilizator'
+          const senderName = profile.full_name || 'Utilizator'
           
-          await sendTicketReplyToAdmins(
-            adminEmails,
+          await sendTicketReplyNotification(
+            adminEmail,
             { subject: ticketData.subject, id: ticket_id },
-            { message },
-            { full_name: userName, email: profile.email }
+            message,
+            senderName
           )
         }
       } catch (emailError) {
