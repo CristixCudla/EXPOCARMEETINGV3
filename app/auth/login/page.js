@@ -140,6 +140,11 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center space-y-2">
               <p className="text-sm text-white/50">
+                <Link href="/auth/forgot-password" className="text-cyan-400 hover:text-cyan-300 font-semibold">
+                  Ai uitat parola?
+                </Link>
+              </p>
+              <p className="text-sm text-white/50">
                 Nu ai cont?{' '}
                 <Link href="/auth/register" className="text-cyan-400 hover:text-cyan-300 font-semibold">
                   Înregistrează-te
