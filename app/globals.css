@@ -309,98 +309,26 @@ html {
 }
 
 .font-logo-cyberpunk {
-  font-family: 'CyberwayRiders', 'Nosifer', var(--font-logo), 'Black Ops One', cursive !important;
+  font-family: 'Black Ops One', 'Orbitron', var(--font-logo), cursive !important;
   font-weight: 400;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-style: normal;
 }
 
-/* Logo Dripping Effect - Efect de picurare/sângerare */
+/* Logo Simple - fără dripping exagerat */
 .logo-dripping {
   position: relative;
   display: inline-block;
-  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.3));
 }
 
 .logo-dripping span {
   position: relative;
   display: inline-block;
-}
-
-/* Efect de picurare pentru EXPO (roz) */
-.logo-dripping span:first-child {
   text-shadow: 
-    0 0 10px rgba(236, 72, 153, 0.8),
-    0 0 20px rgba(236, 72, 153, 0.6),
-    0 1px 0 rgba(236, 72, 153, 0.9),
-    0 2px 0 rgba(236, 72, 153, 0.9),
-    0 3px 0 rgba(236, 72, 153, 0.85),
-    0 4px 0 rgba(236, 72, 153, 0.8),
-    0 5px 0 rgba(236, 72, 153, 0.75),
-    0 6px 0 rgba(236, 72, 153, 0.7),
-    0 7px 0 rgba(236, 72, 153, 0.65),
-    0 8px 0 rgba(236, 72, 153, 0.6),
-    0 9px 0 rgba(236, 72, 153, 0.55),
-    0 10px 0 rgba(236, 72, 153, 0.5),
-    0 11px 0 rgba(236, 72, 153, 0.45),
-    0 12px 1px rgba(236, 72, 153, 0.4),
-    0 13px 1px rgba(236, 72, 153, 0.35),
-    0 14px 2px rgba(236, 72, 153, 0.3),
-    0 15px 2px rgba(236, 72, 153, 0.25),
-    0 16px 3px rgba(236, 72, 153, 0.2),
-    0 18px 4px rgba(236, 72, 153, 0.15),
-    0 20px 5px rgba(236, 72, 153, 0.1);
-}
-
-/* Efect de picurare pentru CAR (alb) */
-.logo-dripping span:nth-child(2) {
-  text-shadow: 
-    0 0 10px rgba(255, 255, 255, 0.8),
-    0 0 20px rgba(255, 255, 255, 0.6),
-    0 1px 0 rgba(255, 255, 255, 0.95),
-    0 2px 0 rgba(255, 255, 255, 0.9),
-    0 3px 0 rgba(255, 255, 255, 0.85),
-    0 4px 0 rgba(255, 255, 255, 0.8),
-    0 5px 0 rgba(255, 255, 255, 0.75),
-    0 6px 0 rgba(255, 255, 255, 0.7),
-    0 7px 0 rgba(255, 255, 255, 0.65),
-    0 8px 0 rgba(255, 255, 255, 0.6),
-    0 9px 0 rgba(255, 255, 255, 0.55),
-    0 10px 0 rgba(255, 255, 255, 0.5),
-    0 11px 0 rgba(255, 255, 255, 0.45),
-    0 12px 1px rgba(255, 255, 255, 0.4),
-    0 13px 1px rgba(255, 255, 255, 0.35),
-    0 14px 2px rgba(255, 255, 255, 0.3),
-    0 15px 2px rgba(255, 255, 255, 0.25),
-    0 16px 3px rgba(255, 255, 255, 0.2),
-    0 18px 4px rgba(255, 255, 255, 0.15),
-    0 20px 5px rgba(255, 255, 255, 0.1);
-}
-
-/* Efect de picurare pentru MEETING (cyan) */
-.logo-dripping span:nth-child(3) {
-  text-shadow: 
-    0 0 10px rgba(6, 182, 212, 0.8),
-    0 0 20px rgba(6, 182, 212, 0.6),
-    0 1px 0 rgba(6, 182, 212, 0.9),
-    0 2px 0 rgba(6, 182, 212, 0.9),
-    0 3px 0 rgba(6, 182, 212, 0.85),
-    0 4px 0 rgba(6, 182, 212, 0.8),
-    0 5px 0 rgba(6, 182, 212, 0.75),
-    0 6px 0 rgba(6, 182, 212, 0.7),
-    0 7px 0 rgba(6, 182, 212, 0.65),
-    0 8px 0 rgba(6, 182, 212, 0.6),
-    0 9px 0 rgba(6, 182, 212, 0.55),
-    0 10px 0 rgba(6, 182, 212, 0.5),
-    0 11px 0 rgba(6, 182, 212, 0.45),
-    0 12px 1px rgba(6, 182, 212, 0.4),
-    0 13px 1px rgba(6, 182, 212, 0.35),
-    0 14px 2px rgba(6, 182, 212, 0.3),
-    0 15px 2px rgba(6, 182, 212, 0.25),
-    0 16px 3px rgba(6, 182, 212, 0.2),
-    0 18px 4px rgba(6, 182, 212, 0.15),
-    0 20px 5px rgba(6, 182, 212, 0.1);
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .section-label {

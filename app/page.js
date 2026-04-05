@@ -503,43 +503,43 @@ export default function HomePage() {
             <span className="deco-symbol text-sm md:text-base">✦ ✦ ✦</span>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
             {/* Coloana 1: Mașini */}
-            <div className="text-center space-y-3 md:space-y-4 border-accent-right py-4 md:py-0">
-              <div className="space-y-2">
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white">
+            <div className="text-center space-y-2 md:space-y-3 lg:space-y-4 border-accent-right py-4 md:py-0">
+              <div className="space-y-1 md:space-y-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black text-white">
                   {stats.totalCars}+
                 </div>
-                <div className="text-xs sm:text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold px-2">
+                <div className="text-[10px] sm:text-xs md:text-sm lg:text-base uppercase tracking-wider text-gray-400 font-semibold px-1 sm:px-2">
                   Mașini Înscrise
                 </div>
               </div>
-              <div className="space-y-1 pt-3 md:pt-4 border-t border-white/10">
-                <div className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 text-xs md:text-sm uppercase tracking-wide font-bold">
+              <div className="space-y-1 pt-2 md:pt-3 lg:pt-4 border-t border-white/10">
+                <div className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 text-[9px] sm:text-[10px] md:text-xs lg:text-sm uppercase tracking-wide font-bold">
                   Build-uri confirmate
                 </div>
               </div>
             </div>
 
             {/* Coloana 2: Pasionați */}
-            <div className="text-center space-y-3 md:space-y-4 py-4 md:py-0">
-              <div className="space-y-2">
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white flex items-center justify-center">
-                  <Infinity className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32" />
+            <div className="text-center space-y-2 md:space-y-3 lg:space-y-4 py-4 md:py-0">
+              <div className="space-y-1 md:space-y-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black text-white flex items-center justify-center">
+                  <Infinity className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-32 xl:h-32" />
                 </div>
-                <div className="text-xs sm:text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold px-2">
+                <div className="text-[10px] sm:text-xs md:text-sm lg:text-base uppercase tracking-wider text-gray-400 font-semibold px-1 sm:px-2">
                   Pasionați
                 </div>
               </div>
             </div>
 
             {/* Coloana 3: Zile */}
-            <div className="text-center space-y-3 md:space-y-4 border-accent-left py-4 md:py-0">
-              <div className="space-y-2">
-                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white">
+            <div className="text-center space-y-2 md:space-y-3 lg:space-y-4 border-accent-left py-4 md:py-0">
+              <div className="space-y-1 md:space-y-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black text-white">
                   2
                 </div>
-                <div className="text-xs sm:text-sm md:text-base uppercase tracking-wider text-gray-400 font-semibold px-2">
+                <div className="text-[10px] sm:text-xs md:text-sm lg:text-base uppercase tracking-wider text-gray-400 font-semibold px-1 sm:px-2">
                   Zile Pline
                 </div>
               </div>
@@ -556,48 +556,48 @@ export default function HomePage() {
             <span className="deco-symbol">✦ ✦ ✦</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+          <div className="grid grid-cols-2 gap-6 md:gap-12 lg:gap-16">
             {/* Coloana 1: Show Auto */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <div>
-                <h2 className="text-5xl md:text-6xl font-black text-white mb-2">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2">
                   SHOW AUTO
                 </h2>
-                <p className="text-2xl md:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
                   & Concursuri
                 </p>
               </div>
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
                 Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
               </p>
             </div>
 
             {/* Coloana 2: Comunitate */}
-            <div className="space-y-6 text-center md:text-left">
+            <div className="space-y-4 md:space-y-6">
               <div>
-                <h2 className="text-5xl md:text-6xl font-black text-white mb-2">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-2">
                   COMUNITATE
                 </h2>
-                <p className="text-2xl md:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
                   & Pasiune
                 </p>
               </div>
-              <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-md mx-auto md:mx-0">
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
                 Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și înscrie-ți mașina.
               </p>
-              <div className="flex justify-center md:justify-start">
+              <div className="flex justify-start">
                 <a 
                   href="https://chat.whatsapp.com/Ihk01gdppgY7bXkbfXLZ53" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-block"
+                  className="inline-block w-full sm:w-auto"
                 >
                   <Button 
-                    size="lg" 
-                    className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold px-6 md:px-8 py-5 md:py-6 rounded-full text-sm md:text-base"
+                    size="sm"
+                    className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold px-3 py-3 sm:px-6 sm:py-5 md:px-8 md:py-6 rounded-full text-xs sm:text-sm md:text-base w-full sm:w-auto"
                   >
-                    <MessageCircle className="mr-2 w-4 h-4 md:w-5 md:h-5" />
-                    GRUP WHATSAPP
+                    <MessageCircle className="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                    <span className="hidden xs:inline">GRUP </span>WHATSAPP
                   </Button>
                 </a>
               </div>
