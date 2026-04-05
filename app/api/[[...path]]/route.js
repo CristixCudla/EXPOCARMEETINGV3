@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { supabase } from '@/lib/supabase'
-import { sendCarApprovalEmail, sendCarRejectionEmail } from '@/lib/gmail-smtp'
+import { sendCarApprovalEmail, sendCarRejectionEmail, sendNewTicketNotification, sendTicketReplyToUser, sendTicketReplyToAdmins } from '@/lib/gmail-smtp'
 
 // Helper to get current user
 async function getCurrentUser(request) {
@@ -301,12 +301,13 @@ export async function POST(request) {
       
       // Send notification email to admin (hardcoded for now)
       // In production, query admin users from profiles table
-      const adminEmail = 'admin@expocarmeeting.ro' // Replace with actual admin email
+      const adminEmails = ['admin@expocarmeeting.ro'] // Replace with actual admin emails
       
       try {
-        await sendEmail(
-          adminEmail,
-          emailTemplates.newTicket(adminEmail, userName, subject, ticketData.id)
+        await sendNewTicketNotification(
+          adminEmails,
+          { subject, message, id: ticketData.id },
+          { full_name: userName, email: user.email }
         )
       } catch (emailError) {
         console.error('Failed to send admin notification:', emailError)
@@ -367,18 +368,21 @@ export async function POST(request) {
           const userEmail = ticketData.profiles.email
           const userName = ticketData.profiles.full_name || 'Utilizator'
           
-          await sendEmail(
+          await sendTicketReplyToUser(
             userEmail,
-            emailTemplates.ticketReply(userEmail, userName, ticketData.subject, message)
+            { subject: ticketData.subject, id: ticket_id },
+            { message, created_by_name: profile.full_name || 'Administrator' }
           )
         } else {
           // User replied, notify admin
-          const adminEmail = 'admin@expocarmeeting.ro' // Replace with actual admin email
+          const adminEmails = ['admin@expocarmeeting.ro'] // Replace with actual admin emails
           const userName = profile.full_name || 'Utilizator'
           
-          await sendEmail(
-            adminEmail,
-            emailTemplates.newTicket(adminEmail, userName, ticketData.subject, ticket_id)
+          await sendTicketReplyToAdmins(
+            adminEmails,
+            { subject: ticketData.subject, id: ticket_id },
+            { message },
+            { full_name: userName, email: profile.email }
           )
         }
       } catch (emailError) {

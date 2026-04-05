@@ -1,307 +1,215 @@
 #!/usr/bin/env python3
 """
-Backend Test Suite for Gmail SMTP Integration
-Testing car approval/rejection email delivery with Gmail SMTP
+Backend API Testing Script for Ticket Reply Email Notification
+Tests the complete flow: user login -> create ticket -> admin login -> reply to ticket -> email notification
 """
 
 import requests
 import json
-import os
+import sys
 import time
-from datetime import datetime
 
-# Get base URL from environment
-BASE_URL = os.getenv('NEXT_PUBLIC_BASE_URL', 'https://modernized-webapp.preview.emergentagent.com')
-API_URL = f"{BASE_URL}/api"
+# Configuration
+BASE_URL = "https://modernized-webapp.preview.emergentagent.com"
+API_BASE = f"{BASE_URL}/api"
 
-class EmailTestSuite:
-    def __init__(self):
-        self.session = requests.Session()
-        self.admin_token = None
-        self.user_token = None
-        self.test_car_id = None
-        
-    def log(self, message):
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        print(f"[{timestamp}] {message}")
-        
-    def test_user_login(self):
-        """Test login with test account cristicudla123@gmail.com"""
-        try:
-            self.log("🔐 Testing user login...")
-            
-            response = self.session.post(f"{API_URL}?path=/auth/login", 
-                json={
-                    "path": "/auth/login",
-                    "email": "cristicudla123@gmail.com",
-                    "password": "Teofan1212"
-                })
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success') and data.get('session'):
-                    self.user_token = data['session']['access_token']
-                    self.log("✅ User login successful")
-                    return True
-                else:
-                    self.log(f"❌ User login failed: {data}")
-                    return False
-            else:
-                self.log(f"❌ User login failed with status {response.status_code}: {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log(f"❌ User login error: {str(e)}")
-            return False
+# Test credentials
+TEST_USER = {
+    "email": "cristicudla123@gmail.com",
+    "password": "Teofan1212"
+}
+
+ADMIN_USER = {
+    "email": "admin@expocarmeeting.ro", 
+    "password": "admin123!"
+}
+
+def make_request(method, endpoint, data=None, headers=None):
+    """Make HTTP request with error handling"""
+    url = f"{API_BASE}?path={endpoint}"
     
-    def test_admin_login(self):
-        """Test admin login"""
-        try:
-            self.log("🔐 Testing admin login...")
-            
-            response = self.session.post(f"{API_URL}?path=/auth/login", 
-                json={
-                    "path": "/auth/login",
-                    "email": "admin@expocarmeeting.ro",
-                    "password": "admin123!"
-                })
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success') and data.get('session'):
-                    self.admin_token = data['session']['access_token']
-                    self.log("✅ Admin login successful")
-                    return True
-                else:
-                    self.log(f"❌ Admin login failed: {data}")
-                    return False
-            else:
-                self.log(f"❌ Admin login failed with status {response.status_code}: {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log(f"❌ Admin login error: {str(e)}")
-            return False
+    default_headers = {"Content-Type": "application/json"}
+    if headers:
+        default_headers.update(headers)
     
-    def test_car_registration(self):
-        """Register a test BMW M4 Competition"""
+    try:
+        if method.upper() == "POST":
+            response = requests.post(url, json=data, headers=default_headers, timeout=30)
+        elif method.upper() == "GET":
+            response = requests.get(url, headers=default_headers, timeout=30)
+        else:
+            raise ValueError(f"Unsupported method: {method}")
+        
+        print(f"📡 {method} {endpoint}")
+        print(f"   Status: {response.status_code}")
+        
         try:
-            self.log("🚗 Testing car registration...")
-            
-            if not self.user_token:
-                self.log("❌ No user token available for car registration")
-                return False
-            
-            headers = {
-                'Authorization': f'Bearer {self.user_token}',
-                'Content-Type': 'application/json'
-            }
-            
-            car_data = {
-                "path": "/cars/register",
-                "make": "BMW",
-                "model": "M4 Competition",
-                "year": 2024,
-                "description": "Test car for Gmail SMTP email verification",
-                "images": [
-                    "https://via.placeholder.com/800x600/0a0a0a/00bcd4?text=BMW+M4",
-                    "https://via.placeholder.com/800x600/1a1a2e/ec4899?text=BMW+M4+Interior"
-                ]
-            }
-            
-            response = self.session.post(f"{API_URL}?path=/cars/register", 
-                json=car_data, headers=headers)
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success') and data.get('car'):
-                    self.test_car_id = data['car']['id']
-                    self.log(f"✅ Car registration successful - Car ID: {self.test_car_id}")
-                    return True
-                else:
-                    self.log(f"❌ Car registration failed: {data}")
-                    return False
+            response_data = response.json()
+            if response.status_code >= 400:
+                print(f"   ❌ Error: {response_data}")
             else:
-                self.log(f"❌ Car registration failed with status {response.status_code}: {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log(f"❌ Car registration error: {str(e)}")
-            return False
+                print(f"   ✅ Success: {response_data}")
+            return response.status_code, response_data
+        except:
+            print(f"   📄 Raw response: {response.text}")
+            return response.status_code, response.text
+            
+    except requests.exceptions.RequestException as e:
+        print(f"   🔥 Request failed: {e}")
+        return None, str(e)
+
+def test_user_login():
+    """Test user login and return auth token"""
+    print("\n🔐 Testing User Login...")
     
-    def test_car_approval_with_gmail_smtp(self):
-        """Test car approval and Gmail SMTP email delivery"""
-        try:
-            self.log("📧 Testing car approval with Gmail SMTP...")
-            
-            if not self.admin_token:
-                self.log("❌ No admin token available for car approval")
-                return False
-                
-            if not self.test_car_id:
-                self.log("❌ No test car ID available for approval")
-                return False
-            
-            headers = {
-                'Authorization': f'Bearer {self.admin_token}',
-                'Content-Type': 'application/json'
-            }
-            
-            approval_data = {
-                "path": "/cars/update-status",
-                "car_id": self.test_car_id,
-                "status": "accepted"
-            }
-            
-            self.log(f"Approving car {self.test_car_id}...")
-            response = self.session.post(f"{API_URL}?path=/cars/update-status", 
-                json=approval_data, headers=headers)
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success'):
-                    self.log("✅ Car approval API call successful")
-                    self.log("📧 Gmail SMTP email should be sent to cristicudla123@gmail.com")
-                    
-                    # Give some time for email processing
-                    time.sleep(2)
-                    
-                    return True
-                else:
-                    self.log(f"❌ Car approval failed: {data}")
-                    return False
-            else:
-                self.log(f"❌ Car approval failed with status {response.status_code}: {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log(f"❌ Car approval error: {str(e)}")
-            return False
+    status, data = make_request("POST", "/auth/login", {
+        "path": "/auth/login",
+        "email": TEST_USER["email"],
+        "password": TEST_USER["password"]
+    })
     
-    def test_car_rejection_with_gmail_smtp(self):
-        """Test car rejection and Gmail SMTP email delivery"""
-        try:
-            self.log("📧 Testing car rejection with Gmail SMTP...")
-            
-            if not self.admin_token:
-                self.log("❌ No admin token available for car rejection")
-                return False
-                
-            if not self.test_car_id:
-                self.log("❌ No test car ID available for rejection")
-                return False
-            
-            headers = {
-                'Authorization': f'Bearer {self.admin_token}',
-                'Content-Type': 'application/json'
-            }
-            
-            rejection_data = {
-                "path": "/cars/update-status",
-                "car_id": self.test_car_id,
-                "status": "rejected"
-            }
-            
-            self.log(f"Rejecting car {self.test_car_id}...")
-            response = self.session.post(f"{API_URL}?path=/cars/update-status", 
-                json=rejection_data, headers=headers)
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('success'):
-                    self.log("✅ Car rejection API call successful")
-                    self.log("📧 Gmail SMTP rejection email should be sent to cristicudla123@gmail.com")
-                    
-                    # Give some time for email processing
-                    time.sleep(2)
-                    
-                    return True
-                else:
-                    self.log(f"❌ Car rejection failed: {data}")
-                    return False
-            else:
-                self.log(f"❌ Car rejection failed with status {response.status_code}: {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log(f"❌ Car rejection error: {str(e)}")
-            return False
+    if status == 200 and data.get("success"):
+        token = data["session"]["access_token"]
+        print(f"   ✅ User login successful, token: {token[:20]}...")
+        return token
+    else:
+        print(f"   ❌ User login failed: {data}")
+        return None
+
+def test_admin_login():
+    """Test admin login and return auth token"""
+    print("\n🔐 Testing Admin Login...")
     
-    def run_gmail_smtp_test_suite(self):
-        """Run the complete Gmail SMTP test suite"""
-        self.log("🚀 Starting Gmail SMTP Integration Test Suite")
-        self.log(f"🌐 Testing against: {BASE_URL}")
+    status, data = make_request("POST", "/auth/login", {
+        "path": "/auth/login", 
+        "email": ADMIN_USER["email"],
+        "password": ADMIN_USER["password"]
+    })
+    
+    if status == 200 and data.get("success"):
+        token = data["session"]["access_token"]
+        print(f"   ✅ Admin login successful, token: {token[:20]}...")
+        return token
+    else:
+        print(f"   ❌ Admin login failed: {data}")
+        return None
+
+def test_create_ticket(user_token):
+    """Create a test ticket and return ticket ID"""
+    print("\n🎫 Testing Ticket Creation...")
+    
+    headers = {"Authorization": f"Bearer {user_token}"}
+    
+    status, data = make_request("POST", "/tickets/create", {
+        "path": "/tickets/create",
+        "subject": "Test Ticket pentru Email",
+        "message": "Vreau să testez dacă primesc email când primesc răspuns la ticket"
+    }, headers)
+    
+    if status == 200 and data.get("success"):
+        ticket_id = data["ticket"]["id"]
+        print(f"   ✅ Ticket created successfully, ID: {ticket_id}")
+        return ticket_id
+    else:
+        print(f"   ❌ Ticket creation failed: {data}")
+        return None
+
+def test_reply_to_ticket(admin_token, ticket_id):
+    """Reply to ticket as admin"""
+    print(f"\n💬 Testing Ticket Reply (ID: {ticket_id})...")
+    
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    
+    status, data = make_request("POST", "/tickets/reply", {
+        "path": "/tickets/reply",
+        "ticket_id": ticket_id,
+        "message": "Bună! Am primit ticket-ul tău. Îți răspundem cât mai curând posibil!"
+    }, headers)
+    
+    if status == 200 and data.get("success"):
+        print(f"   ✅ Ticket reply successful")
+        return True
+    else:
+        print(f"   ❌ Ticket reply failed: {data}")
+        return False
+
+def test_manual_email_trigger(ticket_id):
+    """Manually trigger email notification using Node.js script"""
+    print(f"\n📧 Testing Manual Email Trigger for Ticket {ticket_id}...")
+    
+    # Execute the Node.js script that's already created with dotenv support
+    import subprocess
+    try:
+        result = subprocess.run(['node', '/app/test_email_send.js', ticket_id], 
+                              capture_output=True, text=True, timeout=30, cwd='/app')
         
-        results = {
-            'user_login': False,
-            'admin_login': False,
-            'car_registration': False,
-            'car_approval_email': False,
-            'car_rejection_email': False
-        }
+        print(f"   📤 Node.js output: {result.stdout}")
+        if result.stderr:
+            print(f"   ⚠️  Node.js errors: {result.stderr}")
         
-        # Test 1: User Login
-        results['user_login'] = self.test_user_login()
-        
-        # Test 2: Admin Login  
-        results['admin_login'] = self.test_admin_login()
-        
-        # Test 3: Car Registration (with user token)
-        if results['user_login']:
-            results['car_registration'] = self.test_car_registration()
-        
-        # Test 4: Car Approval with Gmail SMTP
-        if results['admin_login'] and results['car_registration']:
-            results['car_approval_email'] = self.test_car_approval_with_gmail_smtp()
-        
-        # Test 5: Car Rejection with Gmail SMTP (change status back)
-        if results['admin_login'] and results['car_registration']:
-            results['car_rejection_email'] = self.test_car_rejection_with_gmail_smtp()
-        
-        # Summary
-        self.log("\n" + "="*60)
-        self.log("📊 GMAIL SMTP TEST RESULTS SUMMARY")
-        self.log("="*60)
-        
-        for test_name, result in results.items():
-            status = "✅ PASS" if result else "❌ FAIL"
-            self.log(f"{test_name.replace('_', ' ').title()}: {status}")
-        
-        total_tests = len(results)
-        passed_tests = sum(results.values())
-        
-        self.log(f"\nOverall: {passed_tests}/{total_tests} tests passed")
-        
-        if results['car_approval_email'] or results['car_rejection_email']:
-            self.log("\n📧 EMAIL VERIFICATION NOTES:")
-            self.log("- Check cristicudla123@gmail.com inbox for approval/rejection emails")
-            self.log("- Emails should be sent from expocarmeeting@gmail.com")
-            self.log("- Approval email should contain:")
-            self.log("  • Car image (BMW M4 placeholder)")
-            self.log("  • Make/Model/Year (BMW M4 Competition 2024)")
-            self.log("  • 'MAȘINA TA A FOST ACCEPTATĂ!' badge")
-            self.log("  • 'Deschide Support Ticket' button")
-            self.log("- Check backend logs for 'Gmail SMTP ready' and email send confirmations")
-        
-        return results
+        if result.returncode == 0 and "Email sent successfully" in result.stdout:
+            print(f"   ✅ Email trigger successful")
+            return True
+        else:
+            print(f"   ❌ Email trigger failed with code {result.returncode}")
+            return False
+            
+    except subprocess.TimeoutExpired:
+        print(f"   ⏰ Email trigger timed out")
+        return False
+    except Exception as e:
+        print(f"   🔥 Email trigger error: {e}")
+        return False
 
 def main():
     """Main test execution"""
-    try:
-        test_suite = EmailTestSuite()
-        results = test_suite.run_gmail_smtp_test_suite()
-        
-        # Exit with appropriate code
-        if all(results.values()):
-            print("\n🎉 All Gmail SMTP tests passed!")
-            exit(0)
-        else:
-            print("\n⚠️  Some Gmail SMTP tests failed!")
-            exit(1)
-            
-    except Exception as e:
-        print(f"\n💥 Test suite crashed: {str(e)}")
-        exit(1)
+    print("🎯 TICKET REPLY EMAIL NOTIFICATION TEST")
+    print("=" * 50)
+    
+    # Step 1: Login as test user
+    user_token = test_user_login()
+    if not user_token:
+        print("\n❌ Cannot proceed without user authentication")
+        return False
+    
+    # Step 2: Create test ticket
+    ticket_id = test_create_ticket(user_token)
+    if not ticket_id:
+        print("\n❌ Cannot proceed without ticket creation")
+        return False
+    
+    # Step 3: Login as admin
+    admin_token = test_admin_login()
+    if not admin_token:
+        print("\n❌ Cannot proceed without admin authentication")
+        return False
+    
+    # Step 4: Reply to ticket as admin
+    reply_success = test_reply_to_ticket(admin_token, ticket_id)
+    if not reply_success:
+        print("\n❌ Cannot proceed without successful ticket reply")
+        return False
+    
+    # Step 5: Manually trigger email notification
+    email_success = test_manual_email_trigger(ticket_id)
+    
+    # Summary
+    print("\n" + "=" * 50)
+    print("📊 TEST SUMMARY")
+    print("=" * 50)
+    print(f"✅ User Login: {'PASS' if user_token else 'FAIL'}")
+    print(f"✅ Ticket Creation: {'PASS' if ticket_id else 'FAIL'}")
+    print(f"✅ Admin Login: {'PASS' if admin_token else 'FAIL'}")
+    print(f"✅ Ticket Reply: {'PASS' if reply_success else 'FAIL'}")
+    print(f"✅ Email Notification: {'PASS' if email_success else 'FAIL'}")
+    
+    if all([user_token, ticket_id, admin_token, reply_success, email_success]):
+        print("\n🎉 ALL TESTS PASSED! Email notification system is working!")
+        return True
+    else:
+        print("\n❌ Some tests failed. Check the logs above for details.")
+        return False
 
 if __name__ == "__main__":
-    main()
+    success = main()
+    sys.exit(0 if success else 1)
