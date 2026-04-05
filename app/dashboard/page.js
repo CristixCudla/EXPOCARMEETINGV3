@@ -615,6 +615,12 @@ export default function DashboardPage() {
                                     </Button>
                                   </>
                                 )}
+                                {car.status === 'accepted' && (
+                                  <Button size="sm" variant="destructive" onClick={() => handleCarStatusUpdate(car.id, 'rejected')}>
+                                    <X className="w-4 h-4 mr-1" />
+                                    Respinge
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           </CardContent>

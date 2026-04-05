@@ -309,6 +309,18 @@ backend:
         agent: "testing"
         comment: "Invalid endpoints correctly return 404 with 'Invalid endpoint' error message"
 
+  - task: "Admin Email Environment Variable Configuration"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin email configuration successfully moved from hardcoded 'admin@expocarmeeting.ro' to environment variable ADMIN_EMAIL with proper fallback. Tested ticket creation and reply flows - both use process.env.ADMIN_EMAIL correctly. Lines 303 and 377 in route.js updated. All email notifications working correctly with no regressions. Backend logs confirm: 'New ticket notification sent to 1 admins' and proper email delivery."
+
 frontend:
   - task: "Frontend Implementation"
     implemented: true
@@ -349,3 +361,5 @@ agent_communication:
     message: "🎉 GMAIL SMTP INTEGRATION TESTING COMPLETED SUCCESSFULLY! Comprehensive testing of Gmail SMTP email delivery system completed with 5/5 tests passing. Key results: 1) User login (cristicudla123@gmail.com) ✅ working, 2) Admin login ✅ working, 3) Car registration (BMW M4 Competition 2024) ✅ working, 4) Car approval email via Gmail SMTP ✅ working, 5) Car rejection email via Gmail SMTP ✅ working. Backend logs confirm 'Gmail SMTP ready' and successful email delivery to cristicudla123@gmail.com from expocarmeeting@gmail.com. Email templates include car images, Romanian language content, and all required elements. Gmail SMTP has successfully replaced Resend for email delivery."
   - agent: "testing"
     message: "🎫 TICKET REPLY EMAIL NOTIFICATION TESTING COMPLETED SUCCESSFULLY! Complete ticket system email flow tested and working perfectly. Test results: 1) User login (cristicudla123@gmail.com) ✅ working, 2) Ticket creation ✅ working with automatic admin notification, 3) Admin login ✅ working, 4) Admin ticket reply ✅ working with automatic user notification, 5) Email delivery via Gmail SMTP ✅ working. Backend logs confirm: 'New ticket notification sent to 1 admins' and 'Ticket reply sent to user: cristicudla123@gmail.com'. Fixed backend code issues with undefined sendEmail/emailTemplates functions. Email templates include Romanian language content, admin reply message, and 'Răspunde la Ticket' button. Both automatic and manual email triggers confirmed working. Subject: '💬 MESAJ TICKET EXPO CAR MEETING' sent from expocarmeeting@gmail.com."
+  - agent: "testing"
+    message: "✅ ADMIN EMAIL ENVIRONMENT VARIABLE CONFIGURATION TESTING COMPLETED SUCCESSFULLY! Comprehensive testing of admin email configuration changes completed with 6/6 tests passing. Key results: 1) Admin login ✅ working, 2) User login ✅ working, 3) Ticket creation with admin email notification ✅ working (uses process.env.ADMIN_EMAIL), 4) User ticket reply with admin notification ✅ working (uses process.env.ADMIN_EMAIL), 5) Admin reply to user ✅ working (sends to user email), 6) Car status update endpoint ✅ accessible (no regression). Backend logs confirm: 'New ticket notification sent to 1 admins' and 'Ticket reply sent to user: cristicudla123@gmail.com'. The admin email configuration has been successfully moved from hardcoded 'admin@expocarmeeting.ro' to environment variable ADMIN_EMAIL with proper fallback. All email flows working correctly with no regressions."

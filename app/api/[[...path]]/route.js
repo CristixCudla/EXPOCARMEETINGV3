@@ -299,9 +299,8 @@ export async function POST(request) {
       const profile = await getUserProfile(user.id)
       const userName = profile.full_name || 'Utilizator'
       
-      // Send notification email to admin (hardcoded for now)
-      // In production, query admin users from profiles table
-      const adminEmails = ['admin@expocarmeeting.ro'] // Replace with actual admin emails
+      // Send notification email to admin
+      const adminEmails = [process.env.ADMIN_EMAIL || 'admin@expocarmeeting.ro']
       
       try {
         await sendNewTicketNotification(
@@ -375,7 +374,7 @@ export async function POST(request) {
           )
         } else {
           // User replied, notify admin
-          const adminEmails = ['admin@expocarmeeting.ro'] // Replace with actual admin emails
+          const adminEmails = [process.env.ADMIN_EMAIL || 'admin@expocarmeeting.ro']
           const userName = profile.full_name || 'Utilizator'
           
           await sendTicketReplyToAdmins(
