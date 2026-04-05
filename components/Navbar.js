@@ -72,14 +72,11 @@ export default function Navbar() {
       <div className="px-4 md:px-5 lg:px-10 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Image 
-              src="/logo-dripping.png" 
-              alt="EXPO CAR MEETING" 
-              width={220} 
-              height={50}
-              className="h-8 sm:h-10 md:h-12 w-auto object-contain"
-              priority
-            />
+            <span className="font-logo-cyberpunk text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wider logo-dripping">
+              <span className="text-[#ec4899]">EXPO</span>
+              <span className="text-white"> CAR </span>
+              <span className="text-[#06b6d4]">MEETING</span>
+            </span>
           </Link>
           
           <div className="flex items-center gap-2 md:gap-3 relative">
