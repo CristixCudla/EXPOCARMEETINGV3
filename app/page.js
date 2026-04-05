@@ -573,7 +573,7 @@ export default function HomePage() {
             </div>
 
             {/* Coloana 2: Comunitate */}
-            <div className="space-y-6">
+            <div className="space-y-6 text-center md:text-left">
               <div>
                 <h2 className="text-5xl md:text-6xl font-black text-white mb-2">
                   COMUNITATE
@@ -582,23 +582,25 @@ export default function HomePage() {
                   & Pasiune
                 </p>
               </div>
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-300 text-base md:text-lg leading-relaxed max-w-md mx-auto md:mx-0">
                 Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și înscrie-ți mașina.
               </p>
-              <a 
-                href="https://chat.whatsapp.com/Ihk01gdppgY7bXkbfXLZ53" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block"
-              >
-                <Button 
-                  size="lg" 
-                  className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold px-8 py-6 rounded-full"
+              <div className="flex justify-center md:justify-start">
+                <a 
+                  href="https://chat.whatsapp.com/Ihk01gdppgY7bXkbfXLZ53" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block"
                 >
-                  <MessageCircle className="mr-2 w-5 h-5" />
-                  GRUP WHATSAPP
-                </Button>
-              </a>
+                  <Button 
+                    size="lg" 
+                    className="bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold px-6 md:px-8 py-5 md:py-6 rounded-full text-sm md:text-base"
+                  >
+                    <MessageCircle className="mr-2 w-4 h-4 md:w-5 md:h-5" />
+                    GRUP WHATSAPP
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>

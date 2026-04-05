@@ -97,9 +97,12 @@ export default function Navbar() {
                     <Menu className="w-3 h-3 md:w-4 md:h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-black/95 border-white/20 text-white fixed"
+                <DropdownMenuContent 
+                  align="end" 
+                  className="w-56 bg-black/95 border-white/20 text-white"
                   sideOffset={5}
-                  style={{ position: 'fixed' }}
+                  collisionPadding={{ right: 10 }}
+                  avoidCollisions={true}
                 >
                   <DropdownMenuLabel className="text-cyan-400">
                     {userProfile?.email || 'Contul Meu'}
