@@ -711,39 +711,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Secțiune Partener Oficial - AUTO MINGIUC */}
-      <section className="py-20 px-5 md:px-10 relative z-10 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="section-label mb-4 text-cyan-400 uppercase tracking-widest">Partener Oficial</p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <a 
-              href="https://tractarifalticeni.ro"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <div className="relative w-64 h-64 mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-full blur-3xl"></div>
-                <img 
-                  src="https://expocarmeeting.ro/images/auto-mingiuc-official.png"
-                  alt="Auto Mingiuc"
-                  className="relative w-full h-full object-contain"
-                />
-              </div>
-              <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-wider text-center group-hover:text-orange-400 transition-colors">
-                AUTO MINGIUC
-              </h3>
-            </a>
-            <p className="text-gray-400 text-center mt-4">
-              Partener oficial al Expo Car Meeting 2026
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Partener Oficial - Auto Mingiuc */}
       <section className="py-16 md:py-20 px-5 md:px-10 relative z-10">
         <div className="max-w-4xl mx-auto">
@@ -753,22 +720,33 @@ export default function HomePage() {
             </p>
           </div>
           
-          <div className="flex flex-col items-center justify-center">
-            <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-6 md:mb-8">
-              <img 
-                src="/auto-mingiuc-logo.png"
-                alt="Auto Mingiuc - Tractari si Asistenta Rutiera"
-                className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-              />
+          <a 
+            href="https://automingiuc.ro/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-6 md:mb-8">
+                {/* Orange glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-yellow-500/30 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-300"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-orange-500/40 group-hover:border-orange-500/70 transition-all duration-300"></div>
+                
+                <img 
+                  src="/auto-mingiuc-logo.png"
+                  alt="Auto Mingiuc - Tractari si Asistenta Rutiera"
+                  className="relative w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 md:mb-4 text-center group-hover:text-orange-400 transition-colors duration-300">
+                AUTO MINGIUC
+              </h3>
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 text-center max-w-2xl group-hover:text-gray-100 transition-colors duration-300">
+                Partener oficial al Expo Car Meeting 2026
+              </p>
             </div>
-            
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 md:mb-4 text-center">
-              AUTO MINGIUC
-            </h3>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 text-center max-w-2xl">
-              Partener oficial al Expo Car Meeting 2026
-            </p>
-          </div>
+          </a>
         </div>
       </section>
 
