@@ -288,19 +288,19 @@ export default function HomePage() {
         </div>
 
         {/* Hero Content - Aliniat STÂNGA COMPLET pe desktop */}
-        <div className="relative z-20 w-full px-5 md:pl-10 lg:pl-16 md:pr-0 pt-24 md:pt-20">
+        <div className="relative z-20 w-full px-5 md:pl-10 lg:pl-16 md:pr-0 pt-16 md:pt-16">
           <div className="max-w-7xl mx-auto">
             <div className="text-center md:text-left max-w-3xl md:max-w-2xl lg:max-w-3xl">
-              <p className="section-label mb-4 md:mb-6 text-cyan-400 text-xs md:text-sm">
+              <p className="section-label mb-3 md:mb-4 text-cyan-400 text-xs md:text-sm">
                 <MapPin className="inline w-3 h-3 md:w-4 md:h-4 mr-2" />FĂLTICENI • NADA FLORILOR — 2026
               </p>
-              <h1 className="display-heading mb-6 md:mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight">
+              <h1 className="display-heading mb-4 md:mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-tight">
                 UNDE<br />
                 <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400">PASIUNEA</span> &<br />
                 <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-600">PERFORMANȚA</span><br />
                 <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">SE ÎNTÂLNESC</span>
               </h1>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center md:justify-start mt-6 md:mt-8">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center md:justify-start mt-4 md:mt-6">
                 <Link href={user ? "/register-car" : "/auth/register"} className="w-full sm:w-auto">
                   <Button size="lg" className="btn-neon w-full sm:w-auto px-6 md:px-8 py-4 md:py-6 text-base md:text-lg font-bold">
                     ÎNSCRIERE ACUM
@@ -567,7 +567,7 @@ export default function HomePage() {
                   & Concursuri
                 </p>
               </div>
-              <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
                 Un eveniment cu totul special, unde estetica auto întâlnește pasiunea. Te așteaptă două zile de o frumusețe aparte, premii pe măsură și o atmosferă de top pe care nu vrei să o ratezi!
               </p>
             </div>
@@ -582,7 +582,7 @@ export default function HomePage() {
                   & Pasiune
                 </p>
               </div>
-              <p className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed">
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
                 Locul unde pasionații auto se întâlnesc, schimbă experiențe și creează amintiri. Intră în comunitate și înscrie-ți mașina.
               </p>
               <div className="flex justify-start">
